@@ -1,5 +1,5 @@
 ---
- title: "HW 7"
- author: "Your name here"
- format: pdf
- ---
+title: "Final Project"
+author: "Anmol Sapru and Rohit Gunda"
+format: pdf
+---
