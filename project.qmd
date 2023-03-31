@@ -32,6 +32,8 @@ cbb <- cbb |>
     march_madness == "CHAMPS" ~ "Champions",
     TRUE ~ march_madness
   ))
+
+cbb
 ```
 
 ```{r round-separation}
@@ -76,7 +78,9 @@ champ_game <- cbb[!is.na(cbb$champ_game),]
 round_64_model <- glm(round_64 ~ ADJOE + ADJDE + `EFG%` + 
                         `EFGD%` + TOR + TORD + ORB + 
                         DRB + FTR + FTRD + `2P%` + 
-                        `2P%D` + `3P%` + `ADJ T.`,
+                        `2P%D` + `3P%` + `ADJ T.` + 
+                        ADJOE*ADJDE + `EFG%`*`EFGD%` +
+                        TOR*TORD + `2P%`*`2P%D`,
                       data = round_64,
                       family = "binomial")
 
