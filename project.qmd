@@ -9,6 +9,9 @@ format: pdf
 library(tidyverse)
 library(tidymodels)
 library(Stat2Data)
+library(caret)
+library(leaps)
+library(MASS)
 
 cbb <- read_csv("data/cbb.csv") 
 
@@ -16,37 +19,167 @@ cbb <- read_csv("data/cbb.csv")
 cbb <- cbb[!is.na(cbb$POSTSEASON),]
 cbb <- filter(cbb, !grepl("R68", POSTSEASON))
 
-filter(cbb, POSTSEASON == "F4") |>
-  arrange(YEAR)
+#Cleaning up variable names, variables, etc
+cbb$POSTSEASON <- str_trim(cbb$POSTSEASON, side = c("both"))
+cbb <- rename(cbb, march_madness = POSTSEASON) 
+
+cbb <- cbb |>
+  mutate(march_madness = case_when(
+    march_madness == "Sweet Sixteen" ~ "S16",
+    march_madness == "Elite Eight" ~ "E8",
+    march_madness == "Final Four" ~ "F4",
+    march_madness == "Finals" ~ "2ND",
+    march_madness == "CHAMPS" ~ "Champions",
+    TRUE ~ march_madness
+  ))
 ```
 
-```{r}
+```{r round-separation}
 
-#separated 
-cbb <- mutate(cbb, round_64 = if_else(POSTSEASON == "R64", FALSE, TRUE))
+#separated each row by round for determining differences
+cbb <- mutate(cbb, round_64 = if_else(march_madness == "R64", FALSE, TRUE))
+round_64 <- cbb
 
 cbb <- mutate(cbb, round_32 = 
-         case_when(POSTSEASON == "R32" ~ FALSE,
-         POSTSEASON %in% c("S16", "E8", "F4", "2ND", "Champions") ~ TRUE,
+         case_when(march_madness == "R32" ~ FALSE,
+         march_madness %in% c("S16", "E8", "F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
+round_32 <- cbb[!is.na(cbb$round_32),]
 
 cbb <- mutate(cbb, sweet_sixteen = 
-         case_when(POSTSEASON == "S16" ~ FALSE,
-         POSTSEASON %in% c("E8", "F4", "2ND", "Champions") ~ TRUE,
+         case_when(march_madness == "S16" ~ FALSE,
+         march_madness %in% c("E8", "F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
+sweet_sixteen <- cbb[!is.na(cbb$sweet_sixteen),]
 
 cbb <- mutate(cbb, elite_eight = 
-         case_when(POSTSEASON == "E8" ~ FALSE,
-         POSTSEASON %in% c("F4", "2ND", "Champions") ~ TRUE,
+         case_when(march_madness == "E8" ~ FALSE,
+         march_madness %in% c("F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
+elite_eight <- cbb[!is.na(cbb$elite_eight),]
 
 cbb <- mutate(cbb, final_four = 
-         case_when(POSTSEASON == "F4" ~ FALSE,
-         POSTSEASON %in% c("2ND", "Champions") ~ TRUE,
+         case_when(march_madness == "F4" ~ FALSE,
+         march_madness %in% c("2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
+final_four <- cbb[!is.na(cbb$final_four),]
 
 cbb <- mutate(cbb, champ_game = 
-         case_when(POSTSEASON == "2ND" ~ FALSE,
-         POSTSEASON %in% c("Champions") ~ TRUE,
+         case_when(march_madness == "2ND" ~ FALSE,
+         march_madness %in% c("Champions") ~ TRUE,
          TRUE ~ NA))
+champ_game <- cbb[!is.na(cbb$champ_game),]
+```
+
+```{r round-64-model}
+
+round_64_model <- glm(round_64 ~ ADJOE + ADJDE + `EFG%` + 
+                        `EFGD%` + TOR + TORD + ORB + 
+                        DRB + FTR + FTRD + `2P%` + 
+                        `2P%D` + `3P%` + `ADJ T.`,
+                      data = round_64,
+                      family = "binomial")
+
+round_64_min <- glm(round_64 ~ 1,
+                    data = round_64,
+                    family = "binomial")
+
+stepAIC(round_64_min,
+        scope = list(lower = round_64_min, upper = round_64_model),
+        data = round_64, direction = "both")
+```
+
+```{r round-32-model}
+
+round_32_model <- glm(round_32 ~ ADJOE + ADJDE + `EFG%` + 
+                        `EFGD%` + TOR + TORD + ORB +
+                        DRB + FTR + FTRD + `2P%` + 
+                        `2P%D` + `3P%` + `ADJ T.`,
+                      data = round_32,
+                      family = "binomial")
+
+round_32_min <- glm(round_32 ~ 1,
+                    data = round_32,
+                    family = "binomial")
+
+stepAIC(round_32_min,
+        scope = list(lower = round_32_min, 
+                     upper = round_32_model),
+        data = round_32, direction = "both")
+```
+
+```{r sweet-sixteen-model}
+
+sweet_sixteen_model <- glm(sweet_sixteen ~ ADJOE + ADJDE + 
+                           `EFG%` + `EFGD%` + TOR + TORD + 
+                             ORB + DRB + FTR + FTRD + `2P%` + 
+                             `2P%D` + `3P%` + `ADJ T.`,
+                        data = sweet_sixteen,
+                        family = "binomial")
+
+sweet_sixteen_min <- glm(sweet_sixteen ~ 1,
+                    data = sweet_sixteen,
+                    family = "binomial")
+
+stepAIC(sweet_sixteen_min,
+        scope = list(lower = sweet_sixteen_min,
+                     upper = sweet_sixteen_model),
+        data = sweet_sixteen, direction = "both")
+```
+
+```{r elite-eight-model}
+
+elite_eight_model <- glm(elite_eight ~ ADJOE + ADJDE + 
+                         `EFG%` + `EFGD%` + TOR + TORD + 
+                           ORB + DRB + FTR + FTRD + `2P%` + 
+                           `2P%D` + `3P%` + `ADJ T.`,
+                        data = elite_eight,
+                        family = "binomial")
+
+elite_eight_min <- glm(elite_eight ~ 1,
+                    data = elite_eight,
+                    family = "binomial")
+
+stepAIC(elite_eight_min,
+        scope = list(lower = elite_eight_min,
+                     upper = elite_eight_model),
+        data = elite_eight, direction = "both")
+```
+
+```{r final-four-model}
+
+final_four_model <- glm(final_four ~ ADJOE + ADJDE + `EFG%` + 
+                          `EFGD%` + TOR + TORD + ORB + DRB + 
+                          FTR + FTRD + `2P%` + `2P%D` + 
+                          `3P%` + `ADJ T.`,
+                        data = final_four,
+                        family = "binomial")
+
+final_four_min <- glm(final_four ~ 1,
+                    data = final_four,
+                    family = "binomial")
+
+stepAIC(final_four_min,
+        scope = list(lower = final_four_min,
+                     upper = final_four_model),
+        data = final_four, direction = "both")
+```
+
+```{r champ-game-model}
+
+champ_game_model <- glm(champ_game ~ ADJOE + ADJDE + 
+                          `EFG%` + `EFGD%` + TOR + TORD + 
+                          ORB + DRB + FTR + FTRD + `2P%` + 
+                          `2P%D` + `3P%` + `ADJ T.`,
+                        data = champ_game,
+                        family = "binomial")
+
+champ_game_min <- glm(champ_game ~ 1,
+                    data = champ_game,
+                    family = "binomial")
+
+stepAIC(champ_game_min,
+        scope = list(lower = champ_game_min,
+                     upper = champ_game_model),
+        data = champ_game, direction = "both")
 ```
