@@ -1,5 +1,52 @@
 ---
-title: "Final Project"
+title: "Final Project - Predicting March Madness"
 author: "Anmol Sapru and Rohit Gunda"
 format: pdf
 ---
+
+```{r load-libraries-data, message = FALSE, warning = FALSE}
+
+library(tidyverse)
+library(tidymodels)
+library(Stat2Data)
+
+cbb <- read_csv("data/cbb.csv") 
+
+#Remove non-postseason teams and R68 losers
+cbb <- cbb[!is.na(cbb$POSTSEASON),]
+cbb <- filter(cbb, !grepl("R68", POSTSEASON))
+
+filter(cbb, POSTSEASON == "F4") |>
+  arrange(YEAR)
+```
+
+```{r}
+
+#separated 
+cbb <- mutate(cbb, round_64 = if_else(POSTSEASON == "R64", FALSE, TRUE))
+
+cbb <- mutate(cbb, round_32 = 
+         case_when(POSTSEASON == "R32" ~ FALSE,
+         POSTSEASON %in% c("S16", "E8", "F4", "2ND", "Champions") ~ TRUE,
+         TRUE ~ NA))
+
+cbb <- mutate(cbb, sweet_sixteen = 
+         case_when(POSTSEASON == "S16" ~ FALSE,
+         POSTSEASON %in% c("E8", "F4", "2ND", "Champions") ~ TRUE,
+         TRUE ~ NA))
+
+cbb <- mutate(cbb, elite_eight = 
+         case_when(POSTSEASON == "E8" ~ FALSE,
+         POSTSEASON %in% c("F4", "2ND", "Champions") ~ TRUE,
+         TRUE ~ NA))
+
+cbb <- mutate(cbb, final_four = 
+         case_when(POSTSEASON == "F4" ~ FALSE,
+         POSTSEASON %in% c("2ND", "Champions") ~ TRUE,
+         TRUE ~ NA))
+
+cbb <- mutate(cbb, champ_game = 
+         case_when(POSTSEASON == "2ND" ~ FALSE,
+         POSTSEASON %in% c("Champions") ~ TRUE,
+         TRUE ~ NA))
+```
