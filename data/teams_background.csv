@@ -1,0 +1,897 @@
+TEAM,march_madness,Conference,YEAR
+Gonzaga,S16,WCC,2022
+Gonzaga,2ND,WCC,2021
+Gonzaga,E8,WCC,2019
+Villanova,Champions,BE,2018
+Gonzaga,2ND,WCC,2017
+Villanova,Champions,BE,2016
+Kentucky,F4,SEC,2015
+Louisville,S16,Amer,2014
+Louisville,Champions,BE,2013
+Kentucky,Champions,SEC,2012
+Ohio St.,S16,B10,2011
+Duke,Champions,ACC,2010
+Memphis,S16,CUSA,2009
+Kansas,Champions,B12,2008
+Houston,E8,Amer,2022
+Baylor,Champions,B12,2021
+Virginia,Champions,ACC,2019
+Virginia,R64,ACC,2018
+North Carolina,Champions,ACC,2017
+Kansas,E8,B12,2016
+Duke,Champions,ACC,2015
+Arizona,E8,P12,2014
+Florida,E8,SEC,2013
+Ohio St.,F4,B10,2012
+Kansas,E8,B12,2011
+Kansas,R32,B12,2010
+North Carolina,Champions,ACC,2009
+Memphis,2ND,CUSA,2008
+Kansas,Champions,B12,2022
+Houston,F4,Amer,2021
+Texas Tech,2ND,B12,2019
+Duke,E8,ACC,2018
+Villanova,R32,BE,2017
+Virginia,E8,ACC,2016
+Wisconsin,2ND,B10,2015
+Florida,F4,SEC,2014
+Indiana,S16,B10,2013
+Michigan St.,S16,B10,2012
+Duke,S16,ACC,2011
+Syracuse,S16,BE,2010
+Connecticut,F4,BE,2009
+UCLA,F4,P10,2008
+Texas Tech,S16,B12,2022
+Illinois,R32,B10,2021
+Michigan,S16,B10,2019
+Purdue,S16,B10,2018
+Florida,E8,SEC,2017
+North Carolina,2ND,ACC,2016
+Arizona,E8,P12,2015
+Virginia,S16,ACC,2014
+Gonzaga,R32,WCC,2013
+Kansas,2ND,B12,2012
+Texas,R32,B12,2011
+Kentucky,E8,SEC,2010
+Louisville,E8,BE,2009
+North Carolina,F4,ACC,2008
+Baylor,R32,B12,2022
+Michigan,E8,B10,2021
+Duke,E8,ACC,2019
+Cincinnati,R32,Amer,2018
+Kentucky,E8,SEC,2017
+Kentucky,R32,SEC,2016
+Villanova,R32,BE,2015
+Wisconsin,F4,B10,2014
+Syracuse,F4,BE,2013
+North Carolina,E8,ACC,2012
+Kentucky,F4,SEC,2011
+Ohio St.,S16,B10,2010
+Pittsburgh,E8,BE,2009
+Wisconsin,S16,B10,2008
+Duke,F4,ACC,2022
+Iowa,R32,B10,2021
+Michigan St.,F4,B10,2019
+Kansas,F4,B12,2018
+West Virginia,S16,B12,2017
+Michigan St.,R64,B10,2016
+Virginia,R32,ACC,2015
+Duke,R64,ACC,2014
+Michigan,2ND,B10,2013
+Syracuse,E8,BE,2012
+Pittsburgh,R32,BE,2011
+Kansas St.,E8,B12,2010
+Missouri,E8,B12,2009
+Louisville,E8,BE,2008
+Tennessee,R32,SEC,2022
+USC,E8,P12,2021
+North Carolina,S16,ACC,2019
+Michigan,2ND,B10,2018
+Virginia,R32,ACC,2017
+West Virginia,R64,B12,2016
+Gonzaga,E8,WCC,2015
+Tennessee,S16,SEC,2014
+Kansas,S16,B12,2013
+Wisconsin,S16,B10,2012
+Wisconsin,S16,B10,2011
+Baylor,E8,B12,2010
+Kansas,S16,B12,2009
+Duke,R32,ACC,2008
+Villanova,F4,BE,2022
+Colorado,R32,P12,2021
+Kentucky,E8,SEC,2019
+West Virginia,S16,B12,2018
+Louisville,R32,ACC,2017
+Oklahoma,F4,B12,2016
+Utah,S16,P12,2015
+Michigan St.,E8,B10,2014
+Duke,E8,ACC,2013
+Missouri,R64,B12,2012
+Notre Dame,R32,BE,2011
+West Virginia,F4,BE,2010
+West Virginia,R64,BE,2009
+Texas,E8,B12,2008
+Arizona,S16,P12,2022
+Alabama,S16,SEC,2021
+Purdue,E8,B10,2019
+Michigan St.,R32,B10,2018
+Kansas,E8,B12,2017
+Purdue,R64,B10,2016
+North Carolina,S16,ACC,2015
+Wichita St.,R32,MVC,2014
+Ohio St.,E8,B10,2013
+Wichita St.,R64,MVC,2012
+Purdue,R32,B10,2011
+Wisconsin,R32,B10,2010
+UCLA,R32,P10,2009
+Georgetown,R32,BE,2008
+UCLA,S16,P12,2022
+Florida St.,S16,ACC,2021
+Tennessee,S16,SEC,2019
+Xavier,R32,BE,2018
+Duke,R32,ACC,2017
+Wichita St.,R32,MVC,2016
+Notre Dame,E8,ACC,2015
+Michigan,E8,B10,2014
+Wisconsin,R64,B10,2013
+Florida,E8,SEC,2012
+San Diego St.,S16,MWC,2011
+Purdue,S16,B10,2010
+Michigan St.,2ND,B10,2009
+Washington St.,S16,P10,2008
+Kentucky,R64,SEC,2022
+Ohio St.,R64,B10,2021
+Houston,S16,Amer,2019
+North Carolina,R32,ACC,2018
+SMU,R64,Amer,2017
+Oklahoma,S16,B12,2015
+Kansas,R32,B12,2014
+Michigan St.,S16,B10,2013
+Indiana,S16,B10,2012
+North Carolina,E8,ACC,2011
+BYU,R32,MWC,2010
+Gonzaga,S16,WCC,2009
+Stanford,S16,P10,2008
+Purdue,S16,B10,2022
+Wisconsin,R32,B10,2021
+Auburn,F4,SEC,2019
+Tennessee,R32,SEC,2018
+Wichita St.,R32,MVC,2017
+Gonzaga,S16,WCC,2016
+Michigan St.,F4,B10,2015
+Villanova,R32,BE,2014
+Georgetown,R64,BE,2013
+Vanderbilt,R32,SEC,2012
+Illinois,R32,B10,2011
+Texas A&M,R32,B12,2010
+Duke,S16,ACC,2009
+Marquette,R32,BE,2008
+Iowa,R64,B10,2022
+Loyola Chicago,S16,MVC,2021
+Virginia Tech,S16,ACC,2019
+Gonzaga,S16,WCC,2018
+Michigan,S16,B10,2017
+Xavier,R32,BE,2016
+Baylor,R64,B12,2015
+Pittsburgh,R32,ACC,2014
+Arizona,S16,P12,2013
+Memphis,R64,CUSA,2012
+Connecticut,Champions,BE,2011
+California,R32,P10,2010
+Oklahoma,E8,B12,2009
+Clemson,R64,ACC,2008
+Auburn,R32,SEC,2022
+Villanova,S16,BE,2021
+Kansas St.,R64,B12,2019
+Texas Tech,E8,B12,2018
+Saint Mary's,R32,WCC,2017
+Miami FL,S16,ACC,2016
+Wichita St.,S16,MVC,2015
+Connecticut,Champions,Amer,2014
+VCU,R32,A10,2013
+Georgetown,R32,BE,2012
+Louisville,R64,BE,2011
+Butler,2ND,Horz,2010
+Villanova,F4,BE,2009
+Tennessee,S16,SEC,2008
+Texas,R32,B12,2022
+Connecticut,R64,BE,2021
+Florida St.,S16,ACC,2019
+Ohio St.,R32,B10,2018
+Oregon,F4,P12,2017
+Indiana,S16,B10,2016
+Louisville,E8,ACC,2015
+UCLA,S16,P12,2014
+Pittsburgh,R64,BE,2013
+Saint Louis,R32,A10,2012
+Syracuse,R32,BE,2011
+Maryland,R32,ACC,2010
+Syracuse,S16,BE,2009
+Davidson,E8,SC,2008
+North Carolina,2ND,ACC,2022
+Texas Tech,R32,B12,2021
+Iowa St.,R64,B12,2019
+Cincinnati,R32,Amer,2017
+Oregon,E8,P12,2016
+Kansas,R32,B12,2015
+Syracuse,R32,ACC,2014
+Miami FL,S16,ACC,2013
+Louisville,F4,BE,2012
+BYU,S16,MWC,2011
+Georgetown,R64,BE,2010
+Arizona St.,R32,P10,2009
+Michigan St.,S16,B10,2008
+Memphis,R32,Amer,2022
+San Diego St.,R64,MWC,2021
+Kansas,R32,B12,2019
+Florida,R32,SEC,2018
+Purdue,S16,B10,2017
+Northern Iowa,R32,MVC,2015
+Creighton,R32,BE,2014
+Saint Louis,R32,A10,2013
+Baylor,E8,B12,2012
+Florida,E8,SEC,2011
+Clemson,R64,ACC,2010
+Purdue,S16,B10,2009
+Xavier,E8,A10,2008
+Virginia Tech,R64,ACC,2022
+UCLA,F4,P12,2021
+LSU,S16,SEC,2019
+Houston,R32,Amer,2018
+Iowa St.,R32,B12,2017
+Texas A&M,S16,SEC,2016
+Iowa,R32,B10,2015
+Ohio St.,R64,B10,2014
+Creighton,R32,MVC,2013
+Duke,R64,ACC,2012
+Washington,R32,P10,2011
+Xavier,S16,A10,2010
+Washington,R32,P10,2009
+Texas A&M,R32,B12,2008
+Saint Mary's,R32,WCC,2022
+Texas,R64,B12,2021
+Wisconsin,R64,B10,2019
+Butler,R32,BE,2018
+Wisconsin,S16,B10,2017
+Duke,S16,ACC,2016
+Iowa St.,R64,B12,2015
+Wichita St.,F4,MVC,2013
+New Mexico,R32,MWC,2012
+West Virginia,R32,BE,2011
+Temple,R64,A10,2010
+Marquette,R32,BE,2009
+West Virginia,S16,BE,2008
+Illinois,R32,B10,2022
+West Virginia,R32,B12,2021
+Louisville,R64,ACC,2019
+Kentucky,S16,SEC,2018
+Oklahoma St.,R64,B12,2017
+Iowa St.,S16,B12,2016
+Ohio St.,R32,B10,2015
+Gonzaga,R32,WCC,2014
+Minnesota,R32,B10,2013
+Marquette,S16,BE,2012
+Arizona,E8,P10,2011
+Villanova,R32,BE,2010
+BYU,R64,MWC,2009
+Kansas St.,R32,B12,2008
+Arkansas,E8,SEC,2022
+LSU,R32,SEC,2021
+UCF,R32,Amer,2019
+Clemson,S16,ACC,2018
+Notre Dame,R32,ACC,2017
+Arizona,R64,P12,2016
+Butler,R32,BE,2015
+Oklahoma St.,R64,B12,2014
+Marquette,E8,BE,2013
+Florida St.,R32,ACC,2012
+Kansas St.,R32,B12,2011
+Missouri,R32,B12,2010
+Xavier,S16,A10,2009
+Drake,R64,MVC,2008
+LSU,R64,SEC,2022
+Virginia,R64,ACC,2021
+Seton Hall,R32,BE,2018
+Baylor,S16,B12,2017
+California,R64,P12,2016
+Xavier,S16,BE,2015
+Kentucky,2ND,SEC,2014
+Oklahoma St.,R64,B12,2013
+Cincinnati,S16,BE,2012
+Utah St.,R64,WAC,2011
+Texas,R64,B12,2010
+Clemson,R64,ACC,2009
+Purdue,R32,B10,2008
+San Francisco,R64,WCC,2022
+Mississippi St.,R64,SEC,2019
+Creighton,R64,BE,2018
+UCLA,S16,P12,2017
+Seton Hall,R64,BE,2016
+Texas,R64,B12,2015
+San Diego St.,S16,MWC,2014
+Gonzaga,R32,WCC,2012
+Clemson,R64,ACC,2011
+Michigan St.,F4,B10,2010
+Texas,R32,B12,2009
+Pittsburgh,R32,BE,2008
+Michigan,S16,B10,2022
+Creighton,S16,BE,2021
+Florida,R32,SEC,2019
+TCU,R64,B12,2018
+Arizona,S16,P12,2017
+Georgetown,R32,BE,2015
+VCU,R64,A10,2014
+Saint Mary's,R64,WCC,2013
+Michigan,R64,B10,2012
+Cincinnati,R32,BE,2011
+Utah St.,R64,WAC,2010
+USC,R32,P10,2009
+Connecticut,R64,BE,2008
+Connecticut,R64,BE,2022
+BYU,R64,WCC,2021
+Wofford,R32,SC,2019
+Wichita St.,R64,Amer,2018
+South Carolina,F4,SEC,2017
+Iowa,R32,B10,2016
+Providence,R64,BE,2015
+Iowa St.,S16,B12,2014
+North Carolina,R32,ACC,2013
+Purdue,R32,B10,2012
+UNLV,R64,MWC,2011
+Minnesota,R64,B10,2010
+Illinois,R64,B10,2009
+Arizona,R64,P10,2008
+TCU,R32,B12,2022
+Arkansas,E8,SEC,2021
+Cincinnati,R64,Amer,2019
+Auburn,R32,SEC,2018
+Butler,S16,BE,2017
+Butler,R32,BE,2016
+Baylor,S16,B12,2014
+Kansas St.,R64,B12,2013
+Iowa St.,R32,B12,2012
+Michigan,R32,B10,2011
+Marquette,R64,BE,2010
+Wake Forest,R64,ACC,2009
+Gonzaga,R64,WCC,2008
+San Diego St.,R64,MWC,2022
+Tennessee,R64,SEC,2021
+VCU,R64,A10,2019
+Texas A&M,S16,SEC,2018
+Florida St.,R32,ACC,2017
+San Diego St.,R32,MWC,2015
+North Carolina,R32,ACC,2014
+Missouri,R64,SEC,2013
+Alabama,R64,SEC,2012
+Northern Iowa,S16,MVC,2010
+Oklahoma St.,R32,B12,2009
+Notre Dame,R32,BE,2008
+Indiana,R64,B10,2022
+Maryland,R32,B10,2019
+Florida St.,E8,ACC,2018
+Creighton,R64,BE,2017
+Maryland,S16,B10,2016
+Oklahoma,R64,B12,2014
+Iowa St.,R32,B12,2013
+Kansas St.,R32,B12,2012
+Gonzaga,R32,WCC,2011
+Washington,S16,P10,2010
+Butler,R32,Horz,2008
+Purdue,R64,B10,2021
+Buffalo,R32,MAC,2019
+Miami FL,R64,ACC,2018
+Vanderbilt,R64,SEC,2017
+Syracuse,F4,ACC,2016
+West Virginia,S16,B12,2015
+Cincinnati,R64,Amer,2014
+Virginia,R64,ACC,2012
+St. John's,R64,BE,2011
+Oklahoma St.,R64,B12,2010
+Wisconsin,R32,B10,2009
+USC,R64,P10,2008
+Ohio St.,R32,B10,2022
+Oregon,S16,P12,2021
+Kansas St.,E8,B12,2018
+Marquette,R64,BE,2017
+VCU,R32,A10,2016
+Arkansas,R32,SEC,2015
+Oregon,R32,P12,2014
+UNLV,R64,MWC,2013
+UNLV,R64,MWC,2012
+Notre Dame,R64,BE,2010
+Tennessee,R64,SEC,2009
+Indiana,R64,B10,2008
+Alabama,R64,SEC,2022
+Kansas,R32,B12,2021
+Oklahoma,R32,B12,2019
+Virginia Tech,R64,ACC,2018
+Utah,R32,P12,2016
+SMU,R64,Amer,2015
+New Mexico,R64,MWC,2014
+Colorado St.,R32,MWC,2013
+Temple,R64,A10,2012
+Florida St.,S16,ACC,2011
+Georgia Tech,R32,ACC,2010
+Utah,R64,MWC,2009
+Texas,R64,B12,2018
+Kansas St.,R64,B12,2017
+Baylor,R64,B12,2016
+North Carolina St.,S16,ACC,2015
+San Diego St.,R32,MWC,2013
+Vanderbilt,R64,SEC,2011
+Florida St.,R64,ACC,2010
+California,R64,P10,2009
+Georgia Tech,R64,ACC,2021
+Oregon,S16,P12,2019
+Miami FL,R64,ACC,2017
+Connecticut,R32,Amer,2016
+Maryland,R32,B10,2015
+Harvard,R32,Ivy,2014
+Notre Dame,R64,BE,2013
+Marquette,S16,BE,2011
+Tennessee,E8,SEC,2010
+Ohio St.,R64,B10,2009
+Providence,S16,BE,2022
+Maryland,R32,B10,2021
+Saint Mary's,R64,WCC,2019
+Rhode Island,R32,A10,2017
+Purdue,R64,B10,2015
+Saint Joseph's,R64,A10,2014
+Illinois,R32,B10,2013
+Belmont,R64,ASun,2012
+Belmont,R64,ASun,2011
+UNLV,R64,MWC,2010
+Mississippi St.,R32,SEC,2008
+St. Bonaventure,R64,A10,2021
+Nevada,R64,MWC,2019
+Arizona,R64,P12,2018
+Xavier,E8,BE,2017
+Pittsburgh,R64,ACC,2016
+Oregon,S16,P12,2013
+North Carolina St.,S16,ACC,2012
+Villanova,R64,BE,2011
+UTEP,R64,CUSA,2010
+BYU,R64,MWC,2008
+Notre Dame,R32,ACC,2022
+Oklahoma St.,R32,B12,2021
+Syracuse,R64,ACC,2019
+San Diego St.,R64,MWC,2018
+Minnesota,R64,B10,2017
+Cincinnati,R64,Amer,2016
+St. John's,R64,BE,2015
+Texas,R32,B12,2014
+Memphis,R32,CUSA,2013
+Connecticut,R64,BE,2012
+Butler,2ND,Horz,2011
+Pittsburgh,R32,BE,2010
+Wisconsin,R32,B10,2022
+North Carolina,R64,ACC,2021
+Marquette,R64,BE,2019
+Arkansas,R64,SEC,2018
+Michigan St.,R32,B10,2017
+Saint Joseph's,R32,A10,2016
+Davidson,R64,A10,2015
+Memphis,R32,Amer,2014
+Cincinnati,R64,BE,2013
+VCU,R32,CAA,2012
+Georgetown,R64,BE,2011
+Miami FL,R32,ACC,2008
+Miami FL,E8,ACC,2022
+Syracuse,S16,ACC,2021
+Georgia,R64,SEC,2015
+Saint Louis,R32,A10,2014
+Creighton,R32,MVC,2012
+Temple,R32,A10,2011
+Gonzaga,R32,WCC,2010
+Arkansas,R32,SEC,2008
+Loyola Chicago,R64,MVC,2022
+Oklahoma,R32,B12,2021
+Villanova,R32,BE,2019
+Northwestern,R32,B10,2017
+Texas,R64,B12,2016
+Indiana,R64,B10,2015
+Kansas St.,R64,B12,2014
+New Mexico,R64,MWC,2013
+South Florida,R32,BE,2012
+George Mason,R32,CAA,2011
+Old Dominion,R32,CAA,2010
+Florida St.,R64,ACC,2009
+Boise St.,R64,MWC,2022
+Florida,R32,SEC,2021
+Mississippi,R64,SEC,2019
+Cincinnati,R32,Amer,2015
+North Carolina St.,R64,ACC,2013
+St. Bonaventure,R64,A10,2012
+Vanderbilt,R64,SEC,2010
+Arizona,S16,P10,2009
+Baylor,R64,B12,2008
+Michigan St.,R32,B10,2022
+Missouri,R64,SEC,2021
+Baylor,R32,B12,2019
+Loyola Chicago,F4,MVC,2018
+Wisconsin,S16,B10,2016
+Stanford,S16,P12,2014
+Butler,R32,A10,2013
+Harvard,R64,Ivy,2012
+Missouri,R64,B12,2011
+Oregon,R64,P10,2008
+Rutgers,R32,B10,2021
+Utah St.,R64,MWC,2019
+Maryland,R64,B10,2017
+LSU,R64,SEC,2015
+La Salle,S16,A10,2013
+Murray St.,R32,OVC,2012
+Saint Mary's,S16,WCC,2010
+Michigan,R32,B10,2009
+Iowa St.,S16,B12,2022
+VCU,R64,A10,2021
+Nevada,S16,MWC,2018
+VCU,R64,A10,2015
+Colorado,R64,P12,2013
+Texas,R64,B12,2012
+Georgia,R64,SEC,2011
+Texas A&M,R32,B12,2009
+Clemson,R64,ACC,2021
+Iowa,R32,B10,2019
+Missouri,R64,SEC,2018
+Virginia Tech,R64,ACC,2017
+Oklahoma St.,R64,B12,2015
+UCLA,R32,P10,2011
+San Diego St.,R64,MWC,2010
+UNLV,R32,MWC,2008
+Ohio St.,R32,B10,2019
+UCLA,S16,P12,2015
+Villanova,R64,BE,2013
+West Virginia,R64,BE,2012
+Penn St.,R64,B10,2011
+New Mexico,R32,MWC,2010
+LSU,R32,SEC,2009
+Saint Mary's,R64,WCC,2008
+Davidson,R64,A10,2022
+Utah St.,R64,MWC,2021
+Oklahoma,R64,B12,2018
+Middle Tennessee,R32,CUSA,2017
+USC,R64,P12,2016
+Arizona St.,R64,P12,2014
+UCLA,R64,P12,2013
+Minnesota,R64,B10,2009
+Villanova,S16,BE,2008
+Murray St.,R32,OVC,2022
+Minnesota,R32,B10,2019
+Syracuse,S16,ACC,2018
+Providence,R32,BE,2016
+Oregon,R32,P12,2015
+Providence,R64,BE,2014
+Louisville,R64,BE,2010
+Oklahoma,R32,B12,2008
+Arkansas,R32,SEC,2017
+Stephen F. Austin,R32,Slnd,2016
+Oklahoma,R64,B12,2013
+Xavier,R64,A10,2011
+Richmond,R64,A10,2010
+Butler,R64,Horz,2009
+Western Kentucky,S16,SB,2008
+Colorado St.,R64,MWC,2022
+New Mexico St.,R64,WAC,2019
+Long Beach St.,R64,BW,2012
+Richmond,S16,A10,2011
+Cornell,S16,Ivy,2010
+Saint Joseph's,R64,A10,2008
+Virginia Tech,R64,ACC,2021
+Belmont,R64,OVC,2019
+Dayton,R64,A10,2017
+Yale,R32,Ivy,2016
+Dayton,E8,A10,2014
+Florida,R64,SEC,2010
+Creighton,R32,BE,2022
+Washington,R32,P12,2019
+Davidson,R64,A10,2018
+Notre Dame,E8,ACC,2016
+Nebraska,R64,B10,2014
+Mississippi,R32,SEC,2013
+Saint Mary's,R64,WCC,2012
+Tennessee,R64,SEC,2011
+Maryland,R32,ACC,2009
+Georgetown,R64,BE,2021
+North Carolina St.,R64,ACC,2018
+Seton Hall,R64,BE,2017
+Michigan,R64,B10,2016
+George Washington,R64,A10,2014
+Michigan St.,R64,B10,2011
+Oregon St.,E8,P12,2021
+Dayton,R32,A10,2015
+Ohio,S16,MAC,2012
+Texas Tech,R64,B12,2016
+BYU,R64,WCC,2014
+Old Dominion,R64,CAA,2011
+Wake Forest,R32,ACC,2010
+Temple,R64,A10,2009
+Vanderbilt,R64,SEC,2008
+Nevada,R64,MWC,2017
+Dayton,R64,A10,2016
+Temple,R32,A10,2013
+VCU,R64,CAA,2009
+Northern Iowa,R32,MVC,2016
+Stephen F. Austin,R64,Slnd,2015
+North Carolina St.,R64,ACC,2014
+Notre Dame,R64,BE,2012
+Utah St.,R64,WAC,2009
+California,R32,P12,2013
+USC,R64,P12,2022
+Alabama,R32,SEC,2018
+Princeton,R64,Ivy,2017
+Colorado,R64,P12,2016
+Belmont,R64,OVC,2013
+Texas A&M,R64,B12,2011
+Murray St.,R32,OVC,2019
+Providence,R64,BE,2018
+UAB,R64,CUSA,2022
+Hawaii,R32,BW,2016
+Mississippi,R64,SEC,2015
+Xavier,S16,A10,2012
+Mississippi St.,R64,SEC,2009
+Kent St.,R64,MAC,2008
+Seton Hall,R64,BE,2022
+South Dakota St.,R64,Sum,2018
+VCU,R64,A10,2017
+Massachusetts,R64,A10,2014
+Davidson,R64,SC,2013
+BYU,R64,WCC,2012
+VCU,F4,CAA,2011
+Rhode Island,R32,A10,2018
+USC,R32,P12,2017
+Bucknell,R64,Pat,2013
+Boston College,R64,ACC,2009
+Vermont,R64,AE,2022
+UNC Wilmington,R64,CAA,2017
+Davidson,R64,SC,2012
+Arizona St.,R64,P12,2019
+New Mexico St.,R64,WAC,2018
+Vermont,R64,AE,2017
+Oregon St.,R64,P12,2016
+Georgia St.,R32,SB,2015
+Siena,R32,MAAC,2009
+Seton Hall,R64,BE,2019
+Little Rock,R32,SB,2016
+Colorado,R64,P12,2014
+South Dakota St.,R64,Sum,2012
+Oakland,R64,Sum,2011
+Buffalo,R32,MAC,2018
+Siena,R64,MAAC,2010
+Colorado,R32,P12,2012
+Murray St.,R32,OVC,2010
+Temple,R64,A10,2008
+Marquette,R64,BE,2022
+North Dakota St.,R32,Sum,2014
+Kentucky,R64,SEC,2008
+Buffalo,R64,MAC,2015
+UC Santa Barbara,R64,BW,2021
+Stephen F. Austin,R32,Slnd,2014
+Cleveland St.,R32,Horz,2009
+UC Irvine,R32,BW,2019
+East Tennessee St.,R64,SC,2017
+Valparaiso,R64,Horz,2015
+Tulsa,R64,CUSA,2014
+San Diego St.,R64,MWC,2012
+Liberty,R32,BSth,2019
+Manhattan,R64,MAAC,2014
+Southern Miss,R64,CUSA,2012
+Ohio,R32,MAC,2021
+South Alabama,R64,SB,2008
+Vermont,R64,AE,2019
+Valparaiso,R64,Horz,2013
+New Mexico St.,R32,WAC,2022
+New Mexico St.,R64,WAC,2014
+Chattanooga,R64,SC,2022
+St. Bonaventure,R64,A10,2018
+South Dakota St.,R64,Sum,2022
+Murray St.,R64,OVC,2018
+Dayton,R32,A10,2009
+Drake,R64,MVC,2021
+Bucknell,R64,Pat,2017
+Wofford,R64,SC,2010
+Colgate,R64,Pat,2021
+North Dakota St.,R64,Sum,2009
+South Dakota St.,R64,Sum,2016
+Akron,R64,MAC,2013
+Oral Roberts,R64,Sum,2008
+North Texas,R32,CUSA,2021
+Yale,R64,Ivy,2019
+UC Irvine,R64,BW,2015
+New Mexico St.,R64,WAC,2012
+Princeton,R64,Ivy,2011
+Northern Iowa,R64,MVC,2009
+Wofford,R64,SC,2011
+Temple,R64,Amer,2016
+Houston,R64,CUSA,2010
+UNC Greensboro,R64,SC,2018
+George Mason,R64,CAA,2008
+Colorado St.,R64,MWC,2012
+Harvard,R64,Ivy,2015
+Lehigh,R32,Pat,2012
+Montana,R64,BSky,2018
+Memphis,R64,CUSA,2011
+Georgia,R64,SEC,2008
+Eastern Washington,R64,BSky,2021
+New Mexico St.,R64,WAC,2017
+UNC Wilmington,R64,CAA,2016
+North Carolina Central,R64,MEAC,2014
+Sam Houston St.,R64,Slnd,2010
+Western Kentucky,R32,SB,2009
+Richmond,R32,A10,2022
+Cal St. Bakersfield,R64,WAC,2016
+Akron,R64,MAC,2009
+Liberty,R64,ASun,2021
+Mercer,R32,ASun,2014
+New Mexico St.,R64,WAC,2013
+Florida Gulf Coast,S16,ASun,2013
+Winthrop,R64,BSth,2021
+Stephen F. Austin,R64,Slnd,2018
+Iona,R64,MAAC,2013
+Indiana St.,R64,MVC,2011
+Georgia St.,R64,SB,2018
+Siena,R32,MAAC,2008
+Abilene Christian,R32,Slnd,2021
+Northeastern,R64,CAA,2019
+Northern Kentucky,R64,Horz,2019
+Bucknell,R64,Pat,2011
+Cal St. Fullerton,R64,BW,2008
+Grand Canyon,R64,WAC,2021
+Bucknell,R64,Pat,2018
+Stephen F. Austin,R64,Slnd,2009
+Ohio,R32,MAC,2010
+New Mexico St.,R64,WAC,2015
+Saint Peter's,E8,MAAC,2022
+Cal St. Northridge,R64,BW,2009
+Iona,R64,MAAC,2016
+Wofford,R64,SC,2015
+Northeastern,R64,CAA,2015
+South Dakota St.,R64,Sum,2013
+Montana,R64,BSky,2012
+Saint Louis,R64,A10,2019
+Penn,R64,Ivy,2018
+Fresno St.,R64,MWC,2016
+Morehead St.,R32,OVC,2011
+Cornell,R64,Ivy,2009
+Louisiana Lafayette,R64,SB,2014
+Winthrop,R64,BSth,2008
+Harvard,R32,Ivy,2013
+San Diego,R32,WCC,2008
+Florida Gulf Coast,R64,ASun,2017
+Stony Brook,R64,AE,2016
+Georgia St.,R64,SB,2019
+Winthrop,R64,BSth,2017
+New Mexico St.,R64,WAC,2010
+East Tennessee St.,R64,ASun,2009
+UNC Greensboro,R64,SC,2021
+Marshall,R32,CUSA,2018
+American,R64,Pat,2009
+Chattanooga,R64,SC,2016
+Middle Tennessee,R32,CUSA,2016
+Wyoming,R64,MWC,2015
+Delaware,R64,CAA,2014
+Portland St.,R64,BSky,2008
+Old Dominion,R64,CUSA,2019
+American,R64,Pat,2014
+Detroit,R64,Horz,2012
+Akron,R64,MAC,2011
+Oral Roberts,S16,Sum,2021
+LIU Brooklyn,R64,NEC,2011
+Iona,R64,MAAC,2017
+Eastern Kentucky,R64,OVC,2014
+Akron,R64,MAC,2022
+Vermont,R64,AE,2012
+Northern Colorado,R64,BSky,2011
+Montana,R64,BSky,2010
+Colgate,R64,Pat,2022
+UNC Asheville,R64,BSth,2012
+Portland St.,R64,BSky,2009
+Saint Peter's,R64,MAAC,2011
+Albany,R64,AE,2015
+Cornell,R64,Ivy,2008
+Georgia St.,R64,SB,2022
+Pacific,R64,BW,2013
+Morehead St.,R64,OVC,2021
+Colgate,R64,Pat,2019
+Buffalo,R64,MAC,2016
+Eastern Washington,R64,BSky,2015
+Boise St.,R64,WAC,2008
+Iona,R64,MAAC,2021
+Western Michigan,R64,MAC,2014
+Loyola MD,R64,MAAC,2012
+Delaware,R64,CAA,2022
+Montana,R64,BSky,2019
+College of Charleston,R64,CAA,2018
+Green Bay,R64,Horz,2016
+Troy,R64,SB,2017
+UAB,R32,CUSA,2015
+Northwestern St.,R64,Slnd,2013
+Wright St.,R64,Horz,2018
+UC Santa Barbara,R64,BW,2010
+Drexel,R64,CAA,2021
+Weber St.,R64,BSky,2016
+UC Santa Barbara,R64,BW,2011
+UMBC,R64,AE,2008
+Belmont,R64,OVC,2015
+Oakland,R64,Sum,2010
+Robert Morris,R64,NEC,2009
+Coastal Carolina,R64,BSth,2015
+Jacksonville St.,R64,ASun,2022
+Northern Kentucky,R64,Horz,2017
+Longwood,R64,BSth,2022
+Kent St.,R64,MAC,2017
+UNC Asheville,R64,BSth,2016
+Albany,R64,AE,2013
+Vermont,R64,AE,2010
+Belmont,R64,ASun,2008
+Lipscomb,R64,ASun,2018
+Yale,R64,Ivy,2022
+Bradley,R64,MVC,2019
+Iona,R64,MAAC,2018
+Abilene Christian,R64,Slnd,2019
+Montana St.,R64,BSky,2022
+Florida Gulf Coast,R64,ASun,2016
+North Dakota,R64,BSky,2017
+American,R64,Pat,2008
+LIU Brooklyn,R64,NEC,2012
+Jacksonville St.,R64,OVC,2017
+North Dakota St.,R64,Sum,2015
+Morgan St.,R64,MEAC,2009
+UMBC,R32,AE,2018
+Milwaukee,R64,Horz,2014
+Western Kentucky,R64,SB,2013
+East Tennessee St.,R64,ASun,2010
+Gardner Webb,R64,BSth,2019
+Montana,R64,BSky,2013
+Morehead St.,R64,OVC,2009
+Austin Peay,R64,OVC,2008
+UNC Asheville,R64,BSth,2011
+Morgan St.,R64,MEAC,2010
+Albany,R64,AE,2014
+Binghamton,R64,AE,2009
+Mount St. Mary's,R64,NEC,2008
+Cal St. Fullerton,R64,BW,2018
+Weber St.,R64,BSky,2014
+Lehigh,R64,Pat,2010
+James Madison,R64,CAA,2013
+Boston University,R64,AE,2011
+North Texas,R64,SB,2010
+Cal St. Fullerton,R64,BW,2022
+Cleveland St.,R64,Horz,2021
+Radford,R64,BSth,2018
+Southern,R64,SWAC,2013
+Robert Morris,R64,NEC,2010
+South Dakota St.,R64,Sum,2017
+Hartford,R64,AE,2021
+Robert Morris,R64,NEC,2015
+UT Arlington,R64,Slnd,2008
+Wright St.,R64,Horz,2022
+Radford,R64,BSth,2009
+Norfolk St.,R32,MEAC,2012
+Western Kentucky,R64,SB,2012
+North Dakota St.,R64,Sum,2019
+UTSA,R64,Slnd,2011
+Cal Poly,R64,BW,2014
+Texas Southern,R64,SWAC,2022
+Wofford,R64,SC,2014
+Norfolk St.,R64,MEAC,2022
+Mount St. Mary's,R64,NEC,2017
+Iona,R64,MAAC,2019
+UC Davis,R64,BW,2017
+Norfolk St.,R64,MEAC,2021
+Lafayette,R64,Pat,2015
+Coastal Carolina,R64,BSth,2014
+Texas Southern,R64,SWAC,2021
+Chattanooga,R64,SC,2009
+Fairleigh Dickinson,R64,NEC,2019
+Texas Southern,R64,SWAC,2017
+North Carolina A&T,R64,MEAC,2013
+Austin Peay,R64,OVC,2016
+Hampton,R64,MEAC,2011
+Texas Southern,R64,SWAC,2015
+Arkansas Pine Bluff,R64,SWAC,2010
+Texas Southern,R64,SWAC,2018
+Hampton,R64,MEAC,2015
+Hampton,R64,MEAC,2016
+Holy Cross,R64,Pat,2016
+Mississippi Valley St.,R64,SWAC,2008

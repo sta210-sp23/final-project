@@ -13,16 +13,19 @@ library(caret)
 library(leaps)
 library(MASS)
 
-cbb <- read_csv("data/cbb.csv") 
+cbb <- read_csv("data/20082022torvik.csv") 
 sportsreference <- read_csv("data/sportsreference.csv")
+background <- read_csv("data/teams_background.csv")
+
+cbb <- left_join(cbb, background)
 
 #Remove non-postseason teams and R68 losers
-cbb <- cbb[!is.na(cbb$POSTSEASON),]
-cbb <- filter(cbb, !grepl("R68", POSTSEASON))
+cbb <- cbb[!is.na(cbb$march_madness),]
+cbb <- filter(cbb, !grepl("R68", march_madness))
 
 #Cleaning up variable names, variables, etc
-cbb$POSTSEASON <- str_trim(cbb$POSTSEASON, side = c("both"))
-cbb <- rename(cbb, march_madness = POSTSEASON) 
+cbb$march_madness <- str_trim(cbb$march_madness, side = c("both"))
+cbb <- rename(cbb, march_madness = march_madness) 
 
 cbb <- cbb |>
   mutate(march_madness = case_when(
@@ -76,15 +79,20 @@ champ_game <- cbb[!is.na(cbb$champ_game),]
 
 ```{r round-64-model}
 
-round_64_max <- glm(round_64 ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
-                      TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
-                      `2P%D` + `3P%` + `3P%D` + `ADJ T.` + 
-                      `Overall SRS` + `Overall SOS` + `Conf. W-L%` + 
-                      `Home W-L%` + `Away W-L%` + `AVG PPG` + 
-                      `AVG DPPG` + `AVG PD` + `AST/TOV` + `PF/G` + 
-                      ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
-                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + 
-                      `2P%`*`3P%` + `3P%`*`3P%D` + `AVG PPG`*`AVG DPPG`,     
+round_64 <- na.omit(round_64)
+
+round_64_max <- glm(round_64 ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
+                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
+                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
+                      `3PRD` + `ADJ T.` + `Overall SRS` + `Overall SOS` +   
+                      `Conf. W-L%` + `Home W-L%` + `Away W-L%` + 
+                      `AVG PPG` + `AVG DPPG` + `AVG PD` + `AST/TOV` + 
+                      `PF/G` + WINS*G.x + LOSSES*G.x + ADJOE*ADJDE +
+                      `EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + FTR*FTRD +
+                      `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG` +
+                      WINS*`Overall SRS` + WINS*`Overall SOS` +
+                      LOSSES*`Overall SRS` + LOSSES*`Overall SOS`,     
                       data = round_64,
                       family = "binomial")
 
@@ -148,27 +156,27 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
 ```{r}
 
 `2023sr` <- read_csv("data/2023sportsreference.csv")
-`2023analytics` <- read_csv("data/2023marchmadness.csv")
+`2023analytics` <- read_csv("data/2023torvik.csv")
 
-`2023marchmadness` <- left_join(`2023analytics`, `2023sr`, by = c("TEAM" = "School"))
+`2023stats` <- left_join(`2023analytics`, `2023sr`, by = c("TEAM" = "School"))
 
-tibble(predict(round_64_max, `2023marchmadness`)) |>
-  mutate(rank = seq(1:63)) |>
-  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
-  arrange(desc(predict(round_64_max, `2023marchmadness`)))
+`2023teams` <- read_csv("data/2023teams.csv")
 
-tibble(predict(round_32_max, `2023marchmadness`)) |>
-  mutate(rank = seq(1:63)) |>
-  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
-  arrange(desc(predict(round_32_max, `2023marchmadness`)))
+`2023stats` <- `2023stats` |>
+  filter(`2023stats`$TEAM %in% `2023teams`$TEAM)
 
-tibble(predict(sweet_sixteen_max, `2023marchmadness`)) |>
-  mutate(rank = seq(1:63)) |>
-  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
-  arrange(desc(predict(sweet_sixteen_max, `2023marchmadness`)))
+tibble(predict(round_64_model, `2023stats`)) |>
+  mutate(rank = seq(1:64)) |>
+  left_join(mutate(`2023stats`, rank = seq(1:64))) |>
+  arrange(desc(predict(round_64_model, `2023stats`)))
 
-tibble(predict(final_four_max, `2023marchmadness`)) |>
-  mutate(rank = seq(1:63)) |>
-  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
-  arrange(desc(predict(final_four_max, `2023marchmadness`)))
+tibble(predict(round_32_model, `2023stats`)) |>
+  mutate(rank = seq(1:64)) |>
+  left_join(mutate(`2023stats`, rank = seq(1:64))) |>
+  arrange(desc(predict(round_32_model, `2023stats`)))
+
+tibble(predict(sweet_sixteen_model, `2023stats`)) |>
+  mutate(rank = seq(1:64)) |>
+  left_join(mutate(`2023stats`, rank = seq(1:64))) |>
+  arrange(desc(predict(sweet_sixteen_model, `2023stats`)))
 ```
