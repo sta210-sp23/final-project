@@ -14,6 +14,7 @@ library(leaps)
 library(MASS)
 
 cbb <- read_csv("data/cbb.csv") 
+sportsreference <- read_csv("data/sportsreference.csv")
 
 #Remove non-postseason teams and R68 losers
 cbb <- cbb[!is.na(cbb$POSTSEASON),]
@@ -33,7 +34,7 @@ cbb <- cbb |>
     TRUE ~ march_madness
   ))
 
-cbb
+cbb <- left_join(cbb, sportsreference, by = c("TEAM" = "School", "YEAR" = "Year"))
 ```
 
 ```{r round-separation}
@@ -75,12 +76,15 @@ champ_game <- cbb[!is.na(cbb$champ_game),]
 
 ```{r round-64-model}
 
-round_64_model <- glm(round_64 ~ ADJOE + ADJDE + `EFG%` + 
-                        `EFGD%` + TOR + TORD + ORB + 
-                        DRB + FTR + FTRD + `2P%` + 
-                        `2P%D` + `3P%` + `ADJ T.` + 
-                        ADJOE*ADJDE + `EFG%`*`EFGD%` +
-                        TOR*TORD + `2P%`*`2P%D`,
+round_64_max <- glm(round_64 ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
+                      TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
+                      `2P%D` + `3P%` + `3P%D` + `ADJ T.` + 
+                      `Overall SRS` + `Overall SOS` + `Conf. W-L%` + 
+                      `Home W-L%` + `Away W-L%` + `AVG PPG` + 
+                      `AVG DPPG` + `AVG PD` + `AST/TOV` + `PF/G` + 
+                      ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + 
+                      `2P%`*`3P%` + `3P%`*`3P%D` + `AVG PPG`*`AVG DPPG`,     
                       data = round_64,
                       family = "binomial")
 
@@ -88,17 +92,22 @@ round_64_min <- glm(round_64 ~ 1,
                     data = round_64,
                     family = "binomial")
 
-stepAIC(round_64_min,
-        scope = list(lower = round_64_min, upper = round_64_model),
+round_64_model <- stepAIC(round_64_max,
+        scope = list(lower = round_64_min, upper = round_64_max),
         data = round_64, direction = "both")
 ```
 
 ```{r round-32-model}
 
-round_32_model <- glm(round_32 ~ ADJOE + ADJDE + `EFG%` + 
-                        `EFGD%` + TOR + TORD + ORB +
-                        DRB + FTR + FTRD + `2P%` + 
-                        `2P%D` + `3P%` + `ADJ T.`,
+round_32_max <- glm(round_32 ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
+                      TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
+                      `2P%D` + `3P%` + `3P%D` + `ADJ T.` + 
+                      `Overall SRS` + `Overall SOS` + `Conf. W-L%` + 
+                      `Home W-L%` + `Away W-L%` + `AVG PPG` + 
+                      `AVG DPPG` + `AVG PD` + `AST/TOV` + `PF/G` + 
+                      ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + 
+                      `2P%`*`3P%` + `3P%`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                       data = round_32,
                       family = "binomial")
 
@@ -106,18 +115,23 @@ round_32_min <- glm(round_32 ~ 1,
                     data = round_32,
                     family = "binomial")
 
-stepAIC(round_32_min,
+round_32_model <- stepAIC(round_32_max,
         scope = list(lower = round_32_min, 
-                     upper = round_32_model),
+                     upper = round_32_max),
         data = round_32, direction = "both")
 ```
 
 ```{r sweet-sixteen-model}
 
-sweet_sixteen_model <- glm(sweet_sixteen ~ ADJOE + ADJDE + 
-                           `EFG%` + `EFGD%` + TOR + TORD + 
-                             ORB + DRB + FTR + FTRD + `2P%` + 
-                             `2P%D` + `3P%` + `ADJ T.`,
+sweet_sixteen_max <- glm(sweet_sixteen ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
+                      TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
+                      `2P%D` + `3P%` + `3P%D` + `ADJ T.` + 
+                      `Overall SRS` + `Overall SOS` + `Conf. W-L%` + 
+                      `Home W-L%` + `Away W-L%` + `AVG PPG` + 
+                      `AVG DPPG` + `AVG PD` + `AST/TOV` + `PF/G` + 
+                      ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + 
+                      `2P%`*`3P%` + `3P%`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                         data = sweet_sixteen,
                         family = "binomial")
 
@@ -125,65 +139,36 @@ sweet_sixteen_min <- glm(sweet_sixteen ~ 1,
                     data = sweet_sixteen,
                     family = "binomial")
 
-stepAIC(sweet_sixteen_min,
+sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
         scope = list(lower = sweet_sixteen_min,
-                     upper = sweet_sixteen_model),
+                     upper = sweet_sixteen_max),
         data = sweet_sixteen, direction = "both")
 ```
 
-```{r elite-eight-model}
+```{r}
 
-elite_eight_model <- glm(elite_eight ~ ADJOE + ADJDE + 
-                         `EFG%` + `EFGD%` + TOR + TORD + 
-                           ORB + DRB + FTR + FTRD + `2P%` + 
-                           `2P%D` + `3P%` + `ADJ T.`,
-                        data = elite_eight,
-                        family = "binomial")
+`2023sr` <- read_csv("data/2023sportsreference.csv")
+`2023analytics` <- read_csv("data/2023marchmadness.csv")
 
-elite_eight_min <- glm(elite_eight ~ 1,
-                    data = elite_eight,
-                    family = "binomial")
+`2023marchmadness` <- left_join(`2023analytics`, `2023sr`, by = c("TEAM" = "School"))
 
-stepAIC(elite_eight_min,
-        scope = list(lower = elite_eight_min,
-                     upper = elite_eight_model),
-        data = elite_eight, direction = "both")
-```
+tibble(predict(round_64_max, `2023marchmadness`)) |>
+  mutate(rank = seq(1:63)) |>
+  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
+  arrange(desc(predict(round_64_max, `2023marchmadness`)))
 
-```{r final-four-model}
+tibble(predict(round_32_max, `2023marchmadness`)) |>
+  mutate(rank = seq(1:63)) |>
+  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
+  arrange(desc(predict(round_32_max, `2023marchmadness`)))
 
-final_four_model <- glm(final_four ~ ADJOE + ADJDE + `EFG%` + 
-                          `EFGD%` + TOR + TORD + ORB + DRB + 
-                          FTR + FTRD + `2P%` + `2P%D` + 
-                          `3P%` + `ADJ T.`,
-                        data = final_four,
-                        family = "binomial")
+tibble(predict(sweet_sixteen_max, `2023marchmadness`)) |>
+  mutate(rank = seq(1:63)) |>
+  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
+  arrange(desc(predict(sweet_sixteen_max, `2023marchmadness`)))
 
-final_four_min <- glm(final_four ~ 1,
-                    data = final_four,
-                    family = "binomial")
-
-stepAIC(final_four_min,
-        scope = list(lower = final_four_min,
-                     upper = final_four_model),
-        data = final_four, direction = "both")
-```
-
-```{r champ-game-model}
-
-champ_game_model <- glm(champ_game ~ ADJOE + ADJDE + 
-                          `EFG%` + `EFGD%` + TOR + TORD + 
-                          ORB + DRB + FTR + FTRD + `2P%` + 
-                          `2P%D` + `3P%` + `ADJ T.`,
-                        data = champ_game,
-                        family = "binomial")
-
-champ_game_min <- glm(champ_game ~ 1,
-                    data = champ_game,
-                    family = "binomial")
-
-stepAIC(champ_game_min,
-        scope = list(lower = champ_game_min,
-                     upper = champ_game_model),
-        data = champ_game, direction = "both")
+tibble(predict(final_four_max, `2023marchmadness`)) |>
+  mutate(rank = seq(1:63)) |>
+  left_join(mutate(`2023marchmadness`, rank = seq(1:63))) |>
+  arrange(desc(predict(final_four_max, `2023marchmadness`)))
 ```
