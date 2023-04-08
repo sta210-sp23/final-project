@@ -4,7 +4,9 @@ author: "Anmol Sapru and Rohit Gunda"
 format: pdf
 ---
 
-```{r load-libraries-data, message = FALSE, warning = FALSE}
+The following packages were used:
+
+```{r load-packages, message = FALSE, warning = FALSE}
 
 library(tidyverse)
 library(tidymodels)
@@ -12,6 +14,13 @@ library(Stat2Data)
 library(caret)
 library(leaps)
 library(MASS)
+```
+
+Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together.
+
+For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with.
+
+```{r load-data, echo = FALSE}
 
 cbb <- read_csv("data/20082022torvik.csv") 
 sportsreference <- read_csv("data/sportsreference.csv")
@@ -20,7 +29,7 @@ background <- read_csv("data/teams_background.csv")
 cbb <- left_join(cbb, background)
 
 #Remove non-postseason teams and R68 losers
-cbb <- cbb[!is.na(cbb$march_madness),]
+cbb_ <- cbb[!is.na(cbb$march_madness),]
 cbb <- filter(cbb, !grepl("R68", march_madness))
 
 #Cleaning up variable names, variables, etc
@@ -40,44 +49,50 @@ cbb <- cbb |>
 cbb <- left_join(cbb, sportsreference, by = c("TEAM" = "School", "YEAR" = "Year"))
 ```
 
-```{r round-separation}
+We determined it would be best to try different regressions, with logistic regressions by round and an ordinal regression---each with their different assumptions to look into. The issue with the first of these is the low levels of data that limit the creation of a model beyond around the Elite Eight. In preparing for the round-by-round logistic regressions we split up the data from the original data sets into multiple data sets for each round, with a TRUE or FALSE value of whether they won their game in that round.
+
+```{r round-separation, echo = FALSE}
 
 #separated each row by round for determining differences
-cbb <- mutate(cbb, round_64 = if_else(march_madness == "R64", FALSE, TRUE))
-round_64 <- cbb
+cbb_r <- mutate(cbb, round_64 = if_else(march_madness == "R64", FALSE, TRUE))
+round_64 <- cbb_r
 
-cbb <- mutate(cbb, round_32 = 
+cbb_r <- mutate(cbb_r, round_32 = 
          case_when(march_madness == "R32" ~ FALSE,
          march_madness %in% c("S16", "E8", "F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-round_32 <- cbb[!is.na(cbb$round_32),]
+round_32 <- cbb_r[!is.na(cbb_r$round_32),]
 
-cbb <- mutate(cbb, sweet_sixteen = 
+cbb_r <- mutate(cbb_r, sweet_sixteen = 
          case_when(march_madness == "S16" ~ FALSE,
          march_madness %in% c("E8", "F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-sweet_sixteen <- cbb[!is.na(cbb$sweet_sixteen),]
+sweet_sixteen <- cbb_r[!is.na(cbb_r$sweet_sixteen),]
 
-cbb <- mutate(cbb, elite_eight = 
+cbb_r <- mutate(cbb_r, elite_eight = 
          case_when(march_madness == "E8" ~ FALSE,
          march_madness %in% c("F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-elite_eight <- cbb[!is.na(cbb$elite_eight),]
+elite_eight <- cbb_r[!is.na(cbb_r$elite_eight),]
 
-cbb <- mutate(cbb, final_four = 
+cbb_r <- mutate(cbb_r, final_four = 
          case_when(march_madness == "F4" ~ FALSE,
          march_madness %in% c("2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-final_four <- cbb[!is.na(cbb$final_four),]
+final_four <- cbb_r[!is.na(cbb_r$final_four),]
 
-cbb <- mutate(cbb, champ_game = 
+cbb_r <- mutate(cbb_r, champ_game = 
          case_when(march_madness == "2ND" ~ FALSE,
          march_madness %in% c("Champions") ~ TRUE,
          TRUE ~ NA))
-champ_game <- cbb[!is.na(cbb$champ_game),]
+champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
 ```
 
-```{r round-64-model}
+## Round-by-Round Logistic Regression
+
+The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. Using stepAIC works to attempt to limit the overfitting with the data. This was also done for the Round of 32 and Sweet Sixteen.
+
+```{r round-64-model, results = "hide"}
 
 round_64 <- na.omit(round_64)
 
@@ -105,7 +120,7 @@ round_64_model <- stepAIC(round_64_max,
         data = round_64, direction = "both")
 ```
 
-```{r round-32-model}
+```{r round-32-model, echo = FALSE, results = "hide"}
 
 round_32_max <- glm(round_32 ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
                       TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
@@ -129,7 +144,7 @@ round_32_model <- stepAIC(round_32_max,
         data = round_32, direction = "both")
 ```
 
-```{r sweet-sixteen-model}
+```{r sweet-sixteen-model, echo = FALSE, results = "hide"}
 
 sweet_sixteen_max <- glm(sweet_sixteen ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
                       TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
@@ -152,6 +167,27 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
                      upper = sweet_sixteen_max),
         data = sweet_sixteen, direction = "both")
 ```
+
+The following are the regression models that were found from the three rounds of data and regression models run through stepAIC
+
+```{r model-summary}
+
+tidy(round_64_model)
+
+tidy(round_32_model)
+
+tidy(sweet_sixteen_model)
+```
+
+[**round_64_model:**]{.underline} round_64 = -73.3549 + -0.0225\*G.x + 0.0282\*WINS + 0.1082\*ADJOE + 0.2092\*ADJDE + 1.1699\*EFG% + 1.118\*EFGD% + 0.0362\*TORD + 0.0139\*ORB - 0.0531\*FTR - 0.0365\*FTRD - 0.534\*2P% - 0.2252\*2P%D - 0.4423\*3P% - 0.0269\*3P%D - 0.0172\*3PR + 0.2813\*\`Overall SOS\` + 3.0484\*\`Conf. W-L%\` + 2.1731\*\`Home W-L%\` + 0.4743\*\`Away W-L%\` + 104.3906\*\`AVG PPG\` - 103.7416\*\`AVG DPPG\` - 103.9394\*\`AVG PD\` - 0.0451\*\`PF/G\` - 0.0016\*ADJOE\*ADJDE - 0.0214\*EFG%\*EFGD% + 0.0011\*FTR\*FTRD + 0.0102\*2P%\*2P%D + 0.0115\*3P%\*3P%D - 0.0084\*2P%D\*3P%D - 0.0049\*\`AVG PPG\`\*\`AVG DPPG\` + 0.0036\*WINS\*\`Overall SOS\`
+
+[**round_32_model:**]{.underline} round_32 = -35.8423 + 0.3065\*ADJOE + 0.3505\*ADJDE - 0.8266\*EFG% - 0.6406\* EFGD% - 0.2108\*TOR - 0.1673\*TORD - 0.0091\*FTR + 0.3374\*2P% + 0.6722\*3P% + 0.2491\*3P%D + 0.2727\*\`Overall SOS\` + 2.2393\*\`Conf. W-L%\` - 2.2494\*\`Home W-L%\` - 91.1066\*\`AVG PPG\` + 91.5538\*\`AVG DPPG\` + 91.5377\*\`AVG PD\` - 1.1651\*\`AST/TOV\` - 0.1282\*\`PF/G\` - 0.003\*ADJOE\*ADJDE + 0.0128\*EFG%\*EFGD% + 0.0113\*TOR\*TORD - 0.0057\*2P%\*3P% - 0.0076\*3P%\*3P%D - 0.0032\*\`AVG PPG\`\*\`AVG DPPG\`
+
+[**sweet_sixteen_model:**]{.underline}sweet_sixteen = -126.0114 + 0.7471\*ADJOE + 0.9121\*ADJDE + 0.347\*EFGD% - 0.3662\*TOR - 0.2668\*TORD - 0.0139\*FTR - 0.5388\*2P% - 0.8723\*2P%D - 0.3807\*3P% - 0.6091\*3P%D + 0.3366\*\`Overall SOS\` + 2.7979 \*\`Conf. W-L%\` + 1.7034\*\`Away W-L%\` + 1.1668\*\`AVG PPG\` + 1.2084\*\`AVG DPPG\` - 0.0076\*ADJOE\*ADJDE + 0.0192\*TOR\*TORD + 0.0111\*2P%\*2P%D + 0.0107\*3P%\*3P%D - 0.017\*\`AVG PPG\*AVG DPPG\`
+
+## Round-by-Round Logistic Regression
+
+## Checking Regression Predictions With 2023 March Madness
 
 ```{r}
 
@@ -180,3 +216,5 @@ tibble(predict(sweet_sixteen_model, `2023stats`)) |>
   left_join(mutate(`2023stats`, rank = seq(1:64))) |>
   arrange(desc(predict(sweet_sixteen_model, `2023stats`)))
 ```
+
+## Outliers and Randomness of March Madness
