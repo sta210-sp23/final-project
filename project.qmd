@@ -6,7 +6,7 @@ format: pdf
 
 # [Introduction and Data]{.underline}
 
-**ADD MOTIVATION**
+Duke is synonymous with basketball. As Duke students who love Duke Basketball and March Madness, we are interested in performing a statistical analysis on the most thrilling tournament in sports. While watching the 2023 March Madness tournament and the many upsets that came with it, we were motivated to see if we could use statistical methods to predict March Madness winners. Upon scouring sites such as FiveThirtyEight and the KenPom rankings, we were inspired to create models of our own to predict tournament success.
 
 **Fundamental Research Question:** What variables are important to March Madness success and which outliers over the past 8 years have existed that bring the "Madness" to the tournament?
 
@@ -24,7 +24,9 @@ library(MASS)
 
 Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together.
 
-**ADD DEFINITIONS OF KEY VARIABLES**
+Key Variables
+
+-   
 
 **EXPLORATORY DATA ANALYSIS**
 
@@ -222,6 +224,8 @@ mmb_ord_model <- stepAIC(mmb_ord_max,
                      upper = mmb_ord_max),
         data = cbb, direction = "both")
 ```
+
+**ADD ASSESSMENT OF CONDITIONS + DIAGNOSTICS**
 
 # [Results]{.underline}
 
