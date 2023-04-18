@@ -39,6 +39,7 @@ For further cleaning, the non-March Madness teams added in the join were removed
 cbb <- read_csv("data/20082022torvik.csv") 
 sportsreference <- read_csv("data/sportsreference.csv")
 background <- read_csv("data/teams_background.csv")
+sportsreference$Year <- sportsreference$Year-1
 
 cbb <- left_join(cbb, background, by = c("TEAM" = "TEAM", `...23` = "YEAR"))
 
