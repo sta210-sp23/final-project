@@ -4,6 +4,12 @@ author: "Anmol Sapru and Rohit Gunda"
 format: pdf
 ---
 
+# [Introduction and Data]{.underline}
+
+**ADD MOTIVATION**
+
+**Fundamental Research Question:** What variables are important to March Madness success and which outliers over the past 8 years have existed that bring the "Madness" to the tournament?
+
 The following packages were used:
 
 ```{r load-packages, message = FALSE, warning = FALSE}
@@ -18,9 +24,15 @@ library(MASS)
 
 Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together.
 
+**ADD DEFINITIONS OF KEY VARIABLES**
+
+**EXPLORATORY DATA ANALYSIS**
+
 For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with.
 
-```{r load-data, echo = FALSE}
+**ADD CLEARER DESCRIPTION OF DATA CLEANING**
+
+```{r load-data, echo = FALSE, message = FALSE}
 
 cbb <- read_csv("data/20082022torvik.csv") 
 sportsreference <- read_csv("data/sportsreference.csv")
@@ -29,7 +41,7 @@ background <- read_csv("data/teams_background.csv")
 cbb <- left_join(cbb, background)
 
 #Remove non-postseason teams and R68 losers
-cbb_ <- cbb[!is.na(cbb$march_madness),]
+cbb <- cbb[!is.na(cbb$march_madness),]
 cbb <- filter(cbb, !grepl("R68", march_madness))
 
 #Cleaning up variable names, variables, etc
@@ -48,6 +60,8 @@ cbb <- cbb |>
 
 cbb <- left_join(cbb, sportsreference, by = c("TEAM" = "School", "YEAR" = "Year"))
 ```
+
+# [Methodology]{.underline}
 
 We determined it would be best to try different regressions, with logistic regressions by round and an ordinal regression---each with their different assumptions to look into. The issue with the first of these is the low levels of data that limit the creation of a model beyond around the Elite Eight. In preparing for the round-by-round logistic regressions we split up the data from the original data sets into multiple data sets for each round, with a TRUE or FALSE value of whether they won their game in that round.
 
@@ -87,6 +101,8 @@ cbb_r <- mutate(cbb_r, champ_game =
          TRUE ~ NA))
 champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
 ```
+
+**WHY CHOSE EACH VARIABLE**
 
 ## Round-by-Round Logistic Regression
 
@@ -168,16 +184,7 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
         data = sweet_sixteen, direction = "both")
 ```
 
-The following are the regression models that were found from the three rounds of data and regression models run through stepAIC
-
-```{r model-summary}
-
-tidy(round_64_model)
-
-tidy(round_32_model)
-
-tidy(sweet_sixteen_model)
-```
+The following are the regression models that were found from the three rounds of data and regression models run through stepAIC:
 
 [**round_64_model:**]{.underline} round_64 = -73.3549 + -0.0225\*G.x + 0.0282\*WINS + 0.1082\*ADJOE + 0.2092\*ADJDE + 1.1699\*EFG% + 1.118\*EFGD% + 0.0362\*TORD + 0.0139\*ORB - 0.0531\*FTR - 0.0365\*FTRD - 0.534\*2P% - 0.2252\*2P%D - 0.4423\*3P% - 0.0269\*3P%D - 0.0172\*3PR + 0.2813\*\`Overall SOS\` + 3.0484\*\`Conf. W-L%\` + 2.1731\*\`Home W-L%\` + 0.4743\*\`Away W-L%\` + 104.3906\*\`AVG PPG\` - 103.7416\*\`AVG DPPG\` - 103.9394\*\`AVG PD\` - 0.0451\*\`PF/G\` - 0.0016\*ADJOE\*ADJDE - 0.0214\*EFG%\*EFGD% + 0.0011\*FTR\*FTRD + 0.0102\*2P%\*2P%D + 0.0115\*3P%\*3P%D - 0.0084\*2P%D\*3P%D - 0.0049\*\`AVG PPG\`\*\`AVG DPPG\` + 0.0036\*WINS\*\`Overall SOS\`
 
@@ -185,11 +192,40 @@ tidy(sweet_sixteen_model)
 
 [**sweet_sixteen_model:**]{.underline}sweet_sixteen = -126.0114 + 0.7471\*ADJOE + 0.9121\*ADJDE + 0.347\*EFGD% - 0.3662\*TOR - 0.2668\*TORD - 0.0139\*FTR - 0.5388\*2P% - 0.8723\*2P%D - 0.3807\*3P% - 0.6091\*3P%D + 0.3366\*\`Overall SOS\` + 2.7979 \*\`Conf. W-L%\` + 1.7034\*\`Away W-L%\` + 1.1668\*\`AVG PPG\` + 1.2084\*\`AVG DPPG\` - 0.0076\*ADJOE\*ADJDE + 0.0192\*TOR\*TORD + 0.0111\*2P%\*2P%D + 0.0107\*3P%\*3P%D - 0.017\*\`AVG PPG\*AVG DPPG\`
 
-## Round-by-Round Logistic Regression
+## Overall Ordinal Regression
 
-## Checking Regression Predictions With 2023 March Madness
+```{r ordinal-reg}
 
-```{r}
+cbb$march_madness <- fct_relevel(cbb$march_madness, 
+                                 c("R64", "R32", "S16", "E8", 
+                                   "F4", "2ND", "Champions"))
+
+mmb_ord_max <- polr(march_madness ~ 
+                     G.x + WINS + LOSSES + ADJOE + ADJDE + 
+                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
+                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
+                      `3PRD` + `ADJ T.` + `Overall SRS` + `Overall SOS` +   
+                      `Conf. W-L%` + `Home W-L%` + `Away W-L%` + 
+                      `AVG PPG` + `AVG DPPG` + `AVG PD` + `AST/TOV` + 
+                      `PF/G` + WINS*G.x + LOSSES*G.x + ADJOE*ADJDE +
+                      `EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + FTR*FTRD +
+                      `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG` +
+                      WINS*`Overall SRS` + WINS*`Overall SOS` +
+                      LOSSES*`Overall SRS` + LOSSES*`Overall SOS`, 
+                   data = cbb)
+
+mmb_ord_min <- polr(march_madness ~ 1, data = cbb)
+
+mmb_ord_model <- stepAIC(mmb_ord_max,
+        scope = list(lower = mmb_ord_min,
+                     upper = mmb_ord_max),
+        data = cbb, direction = "both")
+```
+
+# [Results]{.underline}
+
+```{r predictions}
 
 `2023sr` <- read_csv("data/2023sportsreference.csv")
 `2023analytics` <- read_csv("data/2023torvik.csv")
@@ -215,6 +251,27 @@ tibble(predict(sweet_sixteen_model, `2023stats`)) |>
   mutate(rank = seq(1:64)) |>
   left_join(mutate(`2023stats`, rank = seq(1:64))) |>
   arrange(desc(predict(sweet_sixteen_model, `2023stats`)))
+
+tibble(predict(mmb_ord_model, `2023stats`)) |>
+  mutate(rank = seq(1:64)) |>
+  left_join(mutate(`2023stats`, rank = seq(1:64))) |>
+  arrange(desc(predict(mmb_ord_model, `2023stats`, type = "probs")))
 ```
 
+**INTERPRET SOMETHING - MOST IMPORTANT VARIABLES**
+
+**ADD ASSUMPTIONS**
+
+**MODEL'S PREDICTIVE POWER**
+
 ## Outliers and Randomness of March Madness
+
+# [Discussion]{.underline}
+
+**MISSING ASSUMPTIONS**
+
+**HYPOTHESIS TESTS**
+
+**COOK'S DISTANCE**
+
+**IDEA'S FOR FUTURE WORK**
