@@ -26,7 +26,21 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 Key Variables
 
--   
+-   ADJOE: How much a team scores per 100 possessions on offense, adjusted for opponent strength and game location (home or away)
+
+-   ADJDE: How many points a team allows per 100 possessions on defense, adjusted for opponent strength and game location (home or away)
+
+-   Overall SOS: Overall strength of schedule for a given season
+
+-   Overall SRS: Simple Rating System, a metric focused on overall team's plus/minus (efficiency metric)
+
+-   TOR: Turnovers committed per game on offense
+
+-   TORD: Turnovers forced per game on defense
+
+-   ADJT:
+
+-   EFG%: Field goal percentage
 
 **EXPLORATORY DATA ANALYSIS**
 
@@ -111,6 +125,8 @@ champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
 ## Round-by-Round Logistic Regression
 
 The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. Using stepAIC works to attempt to limit the overfitting with the data. This was also done for the Round of 32 and Sweet Sixteen.
+
+**WHY LOGISTIC REG?**
 
 ```{r round-64-model, results = "hide"}
 
