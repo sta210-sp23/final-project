@@ -30,10 +30,6 @@ Key Variables
 
 -   ADJDE: How many points a team allows per 100 possessions on defense, adjusted for opponent strength and game location (home or away)
 
--   Overall SOS: Overall strength of schedule for a given season
-
--   Overall SRS: Simple Rating System, a metric focused on overall team's plus/minus (efficiency metric)
-
 -   TOR: Turnovers committed per game on offense
 
 -   TORD: Turnovers forced per game on defense
@@ -53,9 +49,8 @@ For further cleaning, the non-March Madness teams added in the join were removed
 cbb <- read_csv("data/20082022torvik.csv") 
 sportsreference <- read_csv("data/sportsreference.csv")
 background <- read_csv("data/teams_background.csv")
-sportsreference$Year <- sportsreference$Year-1
 
-cbb <- left_join(cbb, background, by = c("TEAM" = "TEAM", `...23` = "YEAR"))
+cbb <- left_join(cbb, background, by = c("TEAM" = "TEAM", "YEAR" = "YEAR"))
 
 #Remove non-postseason teams and R68 losers
 cbb <- cbb[!is.na(cbb$march_madness),]
@@ -64,7 +59,6 @@ cbb <- filter(cbb, !grepl("R68", march_madness))
 #Cleaning up variable names, variables, etc
 cbb$march_madness <- str_trim(cbb$march_madness, side = c("both"))
 cbb <- rename(cbb, march_madness = march_madness) 
-cbb <- rename(cbb, "YEAR" = `...23`) 
 
 cbb <- cbb |>
   mutate(march_madness = case_when(
@@ -135,15 +129,12 @@ round_64 <- na.omit(round_64)
 round_64_max <- glm(round_64 ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
                       `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
                       FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T.` + `Overall SRS` + `Overall SOS` +   
-                      `Conf. W-L%` + `Home W-L%` + `Away W-L%` + 
-                      `AVG PPG` + `AVG DPPG` + `AVG PD` + `AST/TOV` + 
-                      `PF/G` + WINS*G.x + LOSSES*G.x + ADJOE*ADJDE +
-                      `EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + FTR*FTRD +
-                      `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
-                      `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG` +
-                      WINS*`Overall SRS` + WINS*`Overall SOS` +
-                      LOSSES*`Overall SRS` + LOSSES*`Overall SOS`,     
+                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+                      `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
+                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
+                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
+                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                       data = round_64,
                       family = "binomial")
 
@@ -158,17 +149,17 @@ round_64_model <- stepAIC(round_64_max,
 
 ```{r round-32-model, echo = FALSE, results = "hide"}
 
-round_32_max <- glm(round_32 ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
-                      TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
-                      `2P%D` + `3P%` + `3P%D` + `ADJ T.` + 
-                      `Overall SRS` + `Overall SOS` + `Conf. W-L%` + 
-                      `Home W-L%` + `Away W-L%` + `AVG PPG` + 
-                      `AVG DPPG` + `AVG PD` + `AST/TOV` + `PF/G` + 
-                      ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
-                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + 
-                      `2P%`*`3P%` + `3P%`*`3P%D` + `AVG PPG`*`AVG DPPG`,
-                      data = round_32,
-                      family = "binomial")
+round_32_max <- glm(round_32 ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
+                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
+                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
+                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+                      `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
+                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
+                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
+                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
+                    data = round_32,
+                    family = "binomial")
 
 round_32_min <- glm(round_32 ~ 1,
                     data = round_32,
@@ -182,15 +173,15 @@ round_32_model <- stepAIC(round_32_max,
 
 ```{r sweet-sixteen-model, echo = FALSE, results = "hide"}
 
-sweet_sixteen_max <- glm(sweet_sixteen ~ ADJOE + ADJDE + `EFG%` + `EFGD%` +
-                      TOR + TORD + ORB + DRB + FTR + FTRD + `2P%` + 
-                      `2P%D` + `3P%` + `3P%D` + `ADJ T.` + 
-                      `Overall SRS` + `Overall SOS` + `Conf. W-L%` + 
-                      `Home W-L%` + `Away W-L%` + `AVG PPG` + 
-                      `AVG DPPG` + `AVG PD` + `AST/TOV` + `PF/G` + 
-                      ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
-                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + 
-                      `2P%`*`3P%` + `3P%`*`3P%D` + `AVG PPG`*`AVG DPPG`,
+sweet_sixteen_max <- glm(sweet_sixteen ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
+                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
+                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
+                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+                      `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
+                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
+                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
+                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                         data = sweet_sixteen,
                         family = "binomial")
 
@@ -214,27 +205,9 @@ cbb$march_madness <- fct_relevel(cbb$march_madness,
                                  c("R64", "R32", "S16", "E8", 
                                    "F4", "2ND", "Champions"))
 
-mmb_ord_max <- polr(march_madness ~ 
-                     G.x + WINS + LOSSES + ADJOE + ADJDE + 
-                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
-                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T.` + `Overall SRS` + `Overall SOS` +   
-                      `Conf. W-L%` + `Home W-L%` + `Away W-L%` + 
-                      `AVG PPG` + `AVG DPPG` + `AVG PD` + `AST/TOV` + 
-                      `PF/G` + WINS*G.x + LOSSES*G.x + ADJOE*ADJDE +
-                      `EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + FTR*FTRD +
-                      `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
-                      `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG` +
-                      WINS*`Overall SRS` + WINS*`Overall SOS` +
-                      LOSSES*`Overall SRS` + LOSSES*`Overall SOS`, 
-                   data = cbb)
-
-mmb_ord_min <- polr(march_madness ~ 1, data = cbb)
-
-mmb_ord_model <- stepAIC(mmb_ord_max,
-        scope = list(lower = mmb_ord_min,
-                     upper = mmb_ord_max),
-        data = cbb, direction = "both")
+mmb_ord_model <- polr(march_madness ~ ADJOE + ADJDE + TORD + 
+                        FTRD + `2P%D` + `3P%D` + `AVG PPG` + 
+                        `AVG DPPG` + `PF/G`, data = cbb)
 ```
 
 **ADD ASSESSMENT OF CONDITIONS + DIAGNOSTICS**
@@ -271,7 +244,7 @@ tibble(predict(sweet_sixteen_model, `2023stats`)) |>
 tibble(predict(mmb_ord_model, `2023stats`)) |>
   mutate(rank = seq(1:64)) |>
   left_join(mutate(`2023stats`, rank = seq(1:64))) |>
-  arrange(desc(predict(mmb_ord_model, `2023stats`, type = "probs")))
+  arrange(desc(predict(mmb_ord_model, `2023stats`)))
 ```
 
 **INTERPRET SOMETHING - MOST IMPORTANT VARIABLES**
