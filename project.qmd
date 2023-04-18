@@ -40,7 +40,7 @@ cbb <- read_csv("data/20082022torvik.csv")
 sportsreference <- read_csv("data/sportsreference.csv")
 background <- read_csv("data/teams_background.csv")
 
-cbb <- left_join(cbb, background)
+cbb <- left_join(cbb, background, by = c("TEAM" = "TEAM", `...23` = "YEAR"))
 
 #Remove non-postseason teams and R68 losers
 cbb <- cbb[!is.na(cbb$march_madness),]
@@ -49,6 +49,7 @@ cbb <- filter(cbb, !grepl("R68", march_madness))
 #Cleaning up variable names, variables, etc
 cbb$march_madness <- str_trim(cbb$march_madness, side = c("both"))
 cbb <- rename(cbb, march_madness = march_madness) 
+cbb <- rename(cbb, "YEAR" = `...23`) 
 
 cbb <- cbb |>
   mutate(march_madness = case_when(
@@ -187,12 +188,6 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
 ```
 
 The following are the regression models that were found from the three rounds of data and regression models run through stepAIC:
-
-[**round_64_model:**]{.underline} round_64 = -73.3549 + -0.0225\*G.x + 0.0282\*WINS + 0.1082\*ADJOE + 0.2092\*ADJDE + 1.1699\*EFG% + 1.118\*EFGD% + 0.0362\*TORD + 0.0139\*ORB - 0.0531\*FTR - 0.0365\*FTRD - 0.534\*2P% - 0.2252\*2P%D - 0.4423\*3P% - 0.0269\*3P%D - 0.0172\*3PR + 0.2813\*\`Overall SOS\` + 3.0484\*\`Conf. W-L%\` + 2.1731\*\`Home W-L%\` + 0.4743\*\`Away W-L%\` + 104.3906\*\`AVG PPG\` - 103.7416\*\`AVG DPPG\` - 103.9394\*\`AVG PD\` - 0.0451\*\`PF/G\` - 0.0016\*ADJOE\*ADJDE - 0.0214\*EFG%\*EFGD% + 0.0011\*FTR\*FTRD + 0.0102\*2P%\*2P%D + 0.0115\*3P%\*3P%D - 0.0084\*2P%D\*3P%D - 0.0049\*\`AVG PPG\`\*\`AVG DPPG\` + 0.0036\*WINS\*\`Overall SOS\`
-
-[**round_32_model:**]{.underline} round_32 = -35.8423 + 0.3065\*ADJOE + 0.3505\*ADJDE - 0.8266\*EFG% - 0.6406\* EFGD% - 0.2108\*TOR - 0.1673\*TORD - 0.0091\*FTR + 0.3374\*2P% + 0.6722\*3P% + 0.2491\*3P%D + 0.2727\*\`Overall SOS\` + 2.2393\*\`Conf. W-L%\` - 2.2494\*\`Home W-L%\` - 91.1066\*\`AVG PPG\` + 91.5538\*\`AVG DPPG\` + 91.5377\*\`AVG PD\` - 1.1651\*\`AST/TOV\` - 0.1282\*\`PF/G\` - 0.003\*ADJOE\*ADJDE + 0.0128\*EFG%\*EFGD% + 0.0113\*TOR\*TORD - 0.0057\*2P%\*3P% - 0.0076\*3P%\*3P%D - 0.0032\*\`AVG PPG\`\*\`AVG DPPG\`
-
-[**sweet_sixteen_model:**]{.underline}sweet_sixteen = -126.0114 + 0.7471\*ADJOE + 0.9121\*ADJDE + 0.347\*EFGD% - 0.3662\*TOR - 0.2668\*TORD - 0.0139\*FTR - 0.5388\*2P% - 0.8723\*2P%D - 0.3807\*3P% - 0.6091\*3P%D + 0.3366\*\`Overall SOS\` + 2.7979 \*\`Conf. W-L%\` + 1.7034\*\`Away W-L%\` + 1.1668\*\`AVG PPG\` + 1.2084\*\`AVG DPPG\` - 0.0076\*ADJOE\*ADJDE + 0.0192\*TOR\*TORD + 0.0111\*2P%\*2P%D + 0.0107\*3P%\*3P%D - 0.017\*\`AVG PPG\*AVG DPPG\`
 
 ## Overall Ordinal Regression
 
