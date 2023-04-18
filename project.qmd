@@ -8,7 +8,7 @@ format: pdf
 
 Duke is synonymous with basketball. As Duke students who love Duke Basketball and March Madness, we are interested in performing a statistical analysis on the most thrilling tournament in sports. While watching the 2023 March Madness tournament and the many upsets that came with it, we were motivated to see if we could use statistical methods to predict March Madness winners. Upon scouring sites such as FiveThirtyEight and the KenPom rankings, we were inspired to create models of our own to predict tournament success.
 
-**Fundamental Research Question:** What variables are important to March Madness success and which outliers over the past 8 years have existed that bring the "Madness" to the tournament?
+**Fundamental Research Question:** What variables are important to March Madness success and which outliers over the past 15 years have existed that bring "Madness" to "March?
 
 The following packages were used:
 
@@ -244,7 +244,7 @@ tibble(predict(sweet_sixteen_model, `2023stats`)) |>
 tibble(predict(mmb_ord_model, `2023stats`)) |>
   mutate(rank = seq(1:64)) |>
   left_join(mutate(`2023stats`, rank = seq(1:64))) |>
-  arrange(desc(predict(mmb_ord_model, `2023stats`)))
+  arrange(predict(mmb_ord_model, `2023stats`, type = "probs"))
 ```
 
 **INTERPRET SOMETHING - MOST IMPORTANT VARIABLES**
