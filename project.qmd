@@ -38,13 +38,9 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 -   EFG% - Field goal percentage adjusted for value of baskets scored
 
-<<<<<<< HEAD
--   EFG%: Field goal percentage
-=======
-#### [Exploratory Data Analysis]{.underline}
+-   
 
 **EXPLORATORY DATA ANALYSIS-Averages for stats---add by year/by round, Averages for winner stats**
->>>>>>> 6e2641c4d4884737b8e305710f57ee46b95fbb08
 
 #### [Description of Data Cleaning]{.underline}
 
@@ -265,7 +261,17 @@ tibble(predict(mmb_ord_model, `2023stats`)) |>
 
 # [Discussion]{.underline}
 
-**MISSING ASSUMPTIONS**
+**ADD RESIDUAL PLOT + HISTOGRAM + QQ PLOT**
+
+[Model Assumptions]{.underline}
+
+Linearity:
+
+Independence:
+
+Constant Variance:
+
+Normality:
 
 **HYPOTHESIS TESTS**
 
