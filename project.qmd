@@ -34,8 +34,6 @@ Key Variables
 
 -   TORD: Turnovers forced per game on defense
 
--   ADJT:
-
 -   EFG%: Field goal percentage
 
 **EXPLORATORY DATA ANALYSIS**
