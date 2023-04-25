@@ -38,6 +38,8 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 -   EFG% - Field goal percentage adjusted for value of baskets scored
 
+**ADD MORE?**
+
 -   
 
 **EXPLORATORY DATA ANALYSIS-Averages for stats---add by year/by round, Averages for winner stats**
@@ -202,6 +204,8 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
 The following are the regression models that were found from the three rounds of data and regression models run through stepAIC:
 
 ## [Overall Ordinal Regression]{.underline}
+
+We chose to complete an ordinal regression model as each of the next levels of the tournament are in an ordinal progession. While each round is a binary outcome (win/lose), the progression of each round is an ordinal progression.
 
 ```{r ordinal-reg}
 
