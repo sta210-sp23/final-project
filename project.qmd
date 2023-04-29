@@ -238,6 +238,8 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
         scope = list(lower = sweet_sixteen_min,
                      upper = sweet_sixteen_max),
         data = sweet_sixteen, direction = "both")
+
+
 ```
 
 #### [Assumptions]{.underline}
@@ -268,6 +270,8 @@ cbb$march_madness <- fct_relevel(cbb$march_madness,
 mmb_ord_model <- polr(march_madness ~ ADJOE + ADJDE + TORD + 
                         FTRD + `2P%D` + `3P%D` + `AVG PPG` + 
                         `AVG DPPG` + `PF/G`, data = cbb)
+
+summary(mmb_ord_model)
 ```
 
 **ADD ASSESSMENT OF CONDITIONS + DIAGNOSTICS**
@@ -307,11 +311,15 @@ tibble(predict(mmb_ord_model, `2023stats`)) |>
   arrange(predict(mmb_ord_model, `2023stats`, type = "probs"))
 ```
 
-**INTERPRET SOMETHING - MOST IMPORTANT VARIABLES**
+The slope coefficient for average points per game for the Sweet Sixteen logistic model is 1.036. Holding all other variables constant, for every one point increase in average points per game, the odds of winning in the Sweet Sixteen is associated with a e\^-1.036 = 2.818 multiplicative factor on the odds of winning in this round.
+
+The slope coefficient for average points per game for the ordinal regression model is 0.052121. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e\^0.052121 = 1.054 - holding all other predictors in the model constant.
 
 **ADD ASSUMPTIONS**
 
 **MODEL'S PREDICTIVE POWER**
+
+**DESCRIBE KEY VARIABLES**
 
 ## Outliers and Randomness of March Madness
 
