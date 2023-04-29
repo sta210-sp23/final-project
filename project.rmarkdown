@@ -4,6 +4,7 @@ author: "Anmol Sapru and Rohit Gunda"
 format: pdf
 ---
 
+
 # [Introduction and Data]{.underline}
 
 #### [Motivation]{.underline}
@@ -14,6 +15,7 @@ Duke is synonymous with basketball. As Duke students who love Duke Basketball an
 
 #### [**Packages**]{.underline}
 
+
 ```{r load-packages, message = FALSE, warning = FALSE}
 
 library(tidyverse)
@@ -23,6 +25,7 @@ library(caret)
 library(leaps)
 library(MASS)
 ```
+
 
 #### [Data]{.underline}
 
@@ -47,6 +50,7 @@ Data was found from the [Sports Reference college basketball team stats website]
 For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with.
 
 **ADD CLEARER DESCRIPTION OF DATA CLEANING**
+
 
 ```{r load-data, echo = FALSE, message = FALSE}
 
@@ -77,9 +81,11 @@ cbb <- cbb |>
 cbb <- left_join(cbb, sportsreference, by = c("TEAM" = "School", "YEAR" = "Year"))
 ```
 
+
 # [Methodology]{.underline}
 
 We determined it would be best to try different regressions, with logistic regressions by round and an ordinal regression---each with their different assumptions to look into. The issue with the first of these is the low levels of data that limit the creation of a model beyond around the Elite Eight. In preparing for the round-by-round logistic regressions we split up the data from the original data sets into multiple data sets for each round, with a TRUE or FALSE value of whether they won their game in that round.
+
 
 ```{r round-separation, echo = FALSE}
 
@@ -118,6 +124,7 @@ cbb_r <- mutate(cbb_r, champ_game =
 champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
 ```
 
+
 **WHY CHOSE EACH VARIABLE**
 
 ## [Round-by-Round Logistic Regression]{.underline}
@@ -125,6 +132,7 @@ champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
 The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. Using stepAIC works to attempt to limit the overfitting with the data. This was also done for the Round of 32 and Sweet Sixteen.
 
 **WHY LOGISTIC REG?**
+
 
 ```{r round-64-model, results = "hide"}
 
@@ -199,11 +207,13 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
         data = sweet_sixteen, direction = "both")
 ```
 
+
 The following are the regression models that were found from the three rounds of data and regression models run through stepAIC:
 
 ## [Overall Ordinal Regression]{.underline}
 
 We chose to complete an ordinal regression model as each of the next levels of the tournament are in an ordinal progession. While each round is a binary outcome (win/lose), the progression of each round is an ordinal progression.
+
 
 ```{r ordinal-reg}
 
@@ -216,9 +226,11 @@ mmb_ord_model <- polr(march_madness ~ ADJOE + ADJDE + TORD +
                         `AVG DPPG` + `PF/G`, data = cbb)
 ```
 
+
 **ADD ASSESSMENT OF CONDITIONS + DIAGNOSTICS**
 
 # [Results]{.underline}
+
 
 ```{r predictions}
 
@@ -253,6 +265,7 @@ tibble(predict(mmb_ord_model, `2023stats`)) |>
   arrange(predict(mmb_ord_model, `2023stats`, type = "probs"))
 ```
 
+
 **INTERPRET SOMETHING - MOST IMPORTANT VARIABLES**
 
 **ADD ASSUMPTIONS**
@@ -283,6 +296,7 @@ Normality:
 
 **EXPLORATORY DATA ANALYSIS-Averages for stats---by round, Averages for winner stats**
 
+
 ```{r}
 
 cbb |>
@@ -304,3 +318,4 @@ cbb |>
     legend = "March Madness Round"
   )
 ```
+
