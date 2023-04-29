@@ -4,6 +4,7 @@ author: "Anmol Sapru and Rohit Gunda"
 format: pdf
 ---
 
+
 # [Introduction and Data]{.underline}
 
 #### [Motivation]{.underline}
@@ -13,6 +14,7 @@ Duke is synonymous with basketball. As Duke students who love Duke Basketball an
 **Fundamental Research Question:** What variables are important to March Madness success and which outliers over the past 15 years have existed that bring "Madness" to "March?
 
 #### [**Packages**]{.underline}
+
 
 ```{r load-packages, message = FALSE, warning = FALSE}
 
@@ -24,7 +26,9 @@ library(leaps)
 library(MASS)
 ```
 
+
 #### [Data]{.underline}
+
 
 ```{r load-data, echo = FALSE, message = FALSE}
 
@@ -62,6 +66,7 @@ cbb <- cbb |>
 
 ```
 
+
 Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). Both of these sources allow for easy copy + pasting of CSV files with the annual stats for each team and their tournament performance. From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together. With the nature of March Madness being over time, the data most definitely violates expectations of independence, with similar players, coaches, and more between years, but there would not be a reasonable way to complete such analysis without this independence.
 
 #### [**Key Variables**]{.underline}
@@ -85,6 +90,7 @@ We also abbreviated each of the outcomes in the `march_madness` variable. Then, 
 #### [Exploratory Data Analysis]{.underline}
 
 **MAYBE ADD ONE MORE EDA**
+
 
 ```{r EDA-conferences}
 
@@ -128,9 +134,11 @@ cbb |>
   )
 ```
 
+
 # [Methodology]{.underline}
 
 We determined it would be best to try different regressions, with logistic regressions by round and an ordinal regression---each with their different assumptions to look into. The issue with the first of these is the low levels of data that limit the creation of a model beyond around the Elite Eight. In preparing for the round-by-round logistic regressions we split up the data from the original data sets into multiple data sets for each round, with a TRUE or FALSE value of whether they won their game in that round. We chose variables that were determined to be influential for a team based on their regular season performance on March Madness success, with the interaction terms based on variables that would be considered to be differential statistics (i.e. 3P% and 3P%D interact for 3-Pointer % Differential).
+
 
 ```{r round-separation, echo = FALSE}
 
@@ -169,11 +177,13 @@ cbb_r <- mutate(cbb_r, champ_game =
 champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
 ```
 
+
 ## [Round-by-Round Logistic Regression]{.underline}
 
 The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. Using stepAIC works to attempt to limit the overfitting with the data. This was also done for the Round of 32 and Sweet Sixteen.
 
 We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not. For example round_64 measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament -- we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).
+
 
 ```{r round-64-model, results = "hide"}
 
@@ -248,11 +258,13 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
         data = sweet_sixteen, direction = "both")
 ```
 
+
 The following are the regression models that were found from the three rounds of data and regression models run through stepAIC:
 
 ## [Overall Ordinal Regression]{.underline}
 
 We chose to complete an ordinal regression model as each of the next levels of the tournament are in an ordinal progession. While each round is a binary outcome (win/lose), the progression of each round is an ordinal progression.
+
 
 ```{r ordinal-reg}
 
@@ -265,9 +277,11 @@ mmb_ord_model <- polr(march_madness ~ ADJOE + ADJDE + TORD +
                         `AVG DPPG` + `PF/G`, data = cbb)
 ```
 
+
 **ADD ASSESSMENT OF CONDITIONS + DIAGNOSTICS**
 
 # [Results]{.underline}
+
 
 ```{r predictions}
 
@@ -302,6 +316,7 @@ tibble(predict(mmb_ord_model, `2023stats`)) |>
   arrange(predict(mmb_ord_model, `2023stats`, type = "probs"))
 ```
 
+
 **INTERPRET SOMETHING - MOST IMPORTANT VARIABLES**
 
 **ADD ASSUMPTIONS**
@@ -329,3 +344,4 @@ Normality:
 **COOK'S DISTANCE**
 
 **IDEA'S FOR FUTURE WORK**
+
