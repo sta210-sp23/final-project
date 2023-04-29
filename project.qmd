@@ -177,14 +177,12 @@ We chose to do a logistic model because our outcome variable is whether they had
 
 round_64 <- na.omit(round_64)
 
-round_64_max <- glm(round_64 ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
-                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
-                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+round_64_max <- glm(round_64 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
+                      TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
+                      `3P%D` + `3PR` + `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
                       `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
-                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
-                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
-                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                       data = round_64,
                       family = "binomial")
@@ -200,14 +198,12 @@ round_64_model <- stepAIC(round_64_max,
 
 ```{r round-32-model, echo = FALSE, results = "hide"}
 
-round_32_max <- glm(round_32 ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
-                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
-                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+round_32_max <- glm(round_32 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
+                      TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
+                      `3P%D` + `3PR` + `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
                       `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
-                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
-                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
-                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                     data = round_32,
                     family = "binomial")
@@ -224,14 +220,12 @@ round_32_model <- stepAIC(round_32_max,
 
 ```{r sweet-sixteen-model, echo = FALSE, results = "hide"}
 
-sweet_sixteen_max <- glm(sweet_sixteen ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
-                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
-                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+sweet_sixteen_max <- glm(sweet_sixteen ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
+                      TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
+                      `3P%D` + `3PR` + `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
                       `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
-                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
-                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
-                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                         data = sweet_sixteen,
                         family = "binomial")
@@ -245,6 +239,21 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
                      upper = sweet_sixteen_max),
         data = sweet_sixteen, direction = "both")
 ```
+
+#### [Assumptions]{.underline}
+
+As discussed earlier, the independence assumption for the data cannot be well-assumed. There is also a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors.
+
+```{r}
+
+emplogitplot1(round_64 ~ ADJOE, data = round_64, ngroups = 10)
+ 
+emplogitplot1(round_32 ~ ADJDE, data = round_32, ngroups = 10)
+
+emplogitplot1(sweet_sixteen ~ TORD, data = sweet_sixteen, ngroups = 10)
+```
+
+As can be seen above with just a few of the variables from each of the model, the linearity assumption does seem like it can be quite well assumed. We checked most of the variables and saw similar linearity assumptions to be well-assumed, but for the sake of space are just showing this small subset.
 
 ## [Overall Ordinal Regression]{.underline}
 
