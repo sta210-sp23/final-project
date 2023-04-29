@@ -44,11 +44,30 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 **EXPLORATORY DATA ANALYSIS-Averages for stats---add by year/by round, Averages for winner stats**
 
+```{r EDA-conferences}
+
+cbb |>
+  mutate(mm_WINS = case_when(march_madness == "R64" ~ 0, march_madness =="R32" ~ 1, 
+                             march_madness == "E16" ~ 2, march_madness == "E8" ~ 3,
+                             march_madness == "F4" ~ 4, march_madness == "2ND" ~ 5,
+                             march_madness == "Champions" ~ 6, TRUE ~ 0))
+
+ggplot(cbb, aes(x = Conference, y = mm_WINS, fill = Conference)) +
+  geom_col() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Conference",
+    y = "Wins",
+    title = "Wins by Conference"
+  )
+
+```
+
 #### [Description of Data Cleaning]{.underline}
 
 For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with.
 
-**ADD CLEARER DESCRIPTION OF DATA CLEANING**
+We also abbreviated each of the outcomes in the `march_madness` variable. Then, we joined the `cbb` and the `sportsreference` datasets to aggregate all of the statistics and data that were interested in analyzing. Finally, we created the `mm_WINS` variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the `march_madness` variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.
 
 ```{r load-data, echo = FALSE, message = FALSE}
 
@@ -77,6 +96,13 @@ cbb <- cbb |>
   ))
 
 cbb <- left_join(cbb, sportsreference, by = c("TEAM" = "School", "YEAR" = "Year"))
+
+cbb <- cbb |>
+  mutate(mm_WINS = case_when(march_madness == "R64" ~ 0, march_madness =="R32" ~ 1, 
+                             march_madness == "E16" ~ 2, march_madness == "E8" ~ 3,
+                             march_madness == "F4" ~ 4, march_madness == "2ND" ~ 5,
+                             march_madness == "Champions" ~ 6, TRUE ~ 0))
+
 ```
 
 # [Methodology]{.underline}
