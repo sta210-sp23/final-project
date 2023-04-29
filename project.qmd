@@ -78,13 +78,13 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 #### [Description of Data Cleaning]{.underline}
 
-For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First we joined our original `cbb` dataset with `background` which we got from Bart Torvik's analytics website. The latter dataset contained details about each team's performance in the tournament for the relevant years. The observations of teams that did not make the Round of 64 for their tournament were then removed to focus on further prediction.
+For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First we joined our original `cbb` dataset with `background`, both of which we got from Bart Torvik's analytics website. The latter dataset contained details about each team's performance in the tournament for the relevant years. The observations of teams that did not make the Round of 64 for their tournament were then removed to focus on further prediction.
 
-We also abbreviated each of the outcomes in the `march_madness` variable. Then, we joined the `cbb` and the `sportsreference` datasets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e. F4 instead of Final Four). Finally, we created the `mm_WINS` variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the `march_madness` variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.
+We also abbreviated each of the outcomes in the `march_madness` variable. Then, we joined the `cbb` and the `sportsreference` datasets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e. F4 instead of Final Four). Each round was split up to its own variable and dataset which showed the success of each team in each round (e.g. win or loss in the Round of 32). Finally, we created the `mm_WINS` variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the `march_madness` variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.
 
 #### [Exploratory Data Analysis]{.underline}
 
-**Wins by Conference in March Madness**
+**MAYBE ADD ONE MORE EDA**
 
 ```{r EDA-conferences}
 
@@ -121,7 +121,7 @@ cbb |>
   ggplot(aes(x = name, y = value, fill = march_madness)) +
   geom_col(position = "dodge") +
   labs(
-    title = "Round-Wise Stats Trends for March Madness"
+    title = "Round-Wise Stats Trends for March Madness",
     x = "Key Variable",
     y = "Average by Round",
     legend = "March Madness Round"
