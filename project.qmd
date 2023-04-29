@@ -40,7 +40,7 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 #### [Exploratory Data Analysis]{.underline}
 
-**EXPLORATORY DATA ANALYSIS-Averages for stats---add by year/by round, Averages for winner stats**
+**EXPLORATORY DATA ANALYSIS - Wins by Conference in March Madness**
 
 ```{r EDA-conferences}
 
@@ -59,6 +59,30 @@ ggplot(cbb, aes(x = Conference, y = mm_WINS, fill = Conference)) +
     title = "Wins by Conference"
   )
 
+```
+
+**EXPLORATORY DATA ANALYSIS - Averages for stats---by round, Averages for winner stats**
+
+```{r}
+
+cbb |>
+  subset(select = c(ADJOE, ADJDE, TOR, TORD, `ADJ T`, `EFG%`, march_madness)) |>
+  group_by(march_madness) |>
+  summarize(ADJOE = mean(ADJOE),
+            ADJDE = mean(ADJDE),
+            TOR = mean(TOR),
+            TORD = mean(TORD),
+            ADJT = mean(`ADJ T`),
+            `EFG%` = mean(`EFG%`)) |>
+  pivot_longer(cols = c(ADJOE, ADJDE, TOR, TORD, ADJT, `EFG%`)) |>
+  subset(march_madness %in% c("R64", "S16", "F4", "Champions")) |>
+  ggplot(aes(x = name, y = value, fill = march_madness)) +
+  geom_col(position = "dodge") +
+  labs(
+    x = "Key Variable",
+    y = "Average by Round",
+    legend = "March Madness Round"
+  )
 ```
 
 #### [Description of Data Cleaning]{.underline}
@@ -307,26 +331,5 @@ Normality:
 
 **IDEA'S FOR FUTURE WORK**
 
-**EXPLORATORY DATA ANALYSIS-Averages for stats---by round, Averages for winner stats**
-
-```{r}
-
-cbb |>
-  subset(select = c(ADJOE, ADJDE, TOR, TORD, `ADJ T`, `EFG%`, march_madness)) |>
-  group_by(march_madness) |>
-  summarize(ADJOE = mean(ADJOE),
-            ADJDE = mean(ADJDE),
-            TOR = mean(TOR),
-            TORD = mean(TORD),
-            ADJT = mean(`ADJ T`),
-            `EFG%` = mean(`EFG%`)) |>
-  pivot_longer(cols = c(ADJOE, ADJDE, TOR, TORD, ADJT, `EFG%`)) |>
-  subset(march_madness %in% c("R64", "S16", "F4", "Champions")) |>
-  ggplot(aes(x = name, y = value, fill = march_madness)) +
-  geom_col(position = "dodge") +
-  labs(
-    x = "Key Variable",
-    y = "Average by Round",
-    legend = "March Madness Round"
-  )
+```{}
 ```
