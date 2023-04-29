@@ -28,6 +28,8 @@ library(MASS)
 
 Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together. With the nature of March Madness being over time, the data most definitely violates expectations of independence, with similar players, coaches, and more between years, but there would not be a reasonable way to complete such analysis without this independence.
 
+Both of these sources allow for easy copy + pasting of CSV files with the annual stats for each team and their tournament performance.
+
 #### [**Key Variables**]{.underline}
 
 -   ADJOE/ADJDE - Points scored per 100 possessions on offense/defense, adjusted for opponent strength and game location
@@ -87,9 +89,9 @@ cbb |>
 
 #### [Description of Data Cleaning]{.underline}
 
-For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with.
+For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First we joined our original `cbb` dataset with `background` which we got from Bart Torvik's analytics website. The latter dataset contained details about each team's performance in the tournament for the relevant years.
 
-We also abbreviated each of the outcomes in the `march_madness` variable. Then, we joined the `cbb` and the `sportsreference` datasets to aggregate all of the statistics and data that were interested in analyzing. Finally, we created the `mm_WINS` variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the `march_madness` variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.
+We also abbreviated each of the outcomes in the `march_madness` variable. Then, we joined the `cbb` and the `sportsreference` datasets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e. F4 instead of Final Four). Finally, we created the `mm_WINS` variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the `march_madness` variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.
 
 ```{r load-data, echo = FALSE, message = FALSE}
 
