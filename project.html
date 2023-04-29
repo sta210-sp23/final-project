@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Anmol Sapru and Rohit Gunda">
+
+<title>Final Project - Predicting March Madness</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="project_files/libs/clipboard/clipboard.min.js"></script>
+<script src="project_files/libs/quarto-html/quarto.js"></script>
+<script src="project_files/libs/quarto-html/popper.min.js"></script>
+<script src="project_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="project_files/libs/quarto-html/anchor.min.js"></script>
+<link href="project_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="project_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="project_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Final Project - Predicting March Madness</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Anmol Sapru and Rohit Gunda </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction-and-data" class="level1">
+<h1><u>Introduction and Data</u></h1>
+<section id="motivation" class="level4">
+<h4 class="anchored" data-anchor-id="motivation"><u>Motivation</u></h4>
+<p>Duke is synonymous with basketball. As Duke students who love Duke Basketball and March Madness, we are interested in performing a statistical analysis on the most thrilling tournament in sports. While watching the 2023 March Madness tournament and the many upsets that came with it, we were motivated to see if we could use statistical methods to predict March Madness winners. Upon scouring sites such as FiveThirtyEight and the KenPom rankings, we were inspired to create models of our own to predict tournament success.</p>
+<p><strong>Fundamental Research Question:</strong> What variables are important to March Madness success and which outliers over the past 15 years have existed that bring “Madness” to “March?</p>
+</section>
+<section id="packages" class="level4">
+<h4 class="anchored" data-anchor-id="packages"><u><strong>Packages</strong></u></h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Stat2Data)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaps)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data" class="level4">
+<h4 class="anchored" data-anchor-id="data"><u>Data</u></h4>
+<div class="cell">
+
+</div>
+<p>Data was found from the <a href="https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html">Sports Reference college basketball team stats website</a> and <a href="https://barttorvik.com/#">Bart Torvik analytics website</a>, with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). Both of these sources allow for easy copy + pasting of CSV files with the annual stats for each team and their tournament performance. From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together. With the nature of March Madness being over time, the data most definitely violates expectations of independence, with similar players, coaches, and more between years, but there would not be a reasonable way to complete such analysis without this independence.</p>
+</section>
+<section id="key-variables" class="level4">
+<h4 class="anchored" data-anchor-id="key-variables"><u><strong>Key Variables</strong></u></h4>
+<ul>
+<li><p>march_madness - Our key response variable that states the round each team was able to make it to in their tournament. Our overall goal is to predict this variable for teams in the 2023 March Madness Tournament</p></li>
+<li><p>ADJOE/ADJDE - Points scored per 100 possessions on offense/defense, adjusted for opponent strength and game location</p></li>
+<li><p>TOR/TORD - Turnovers committed/forced per game on offense/defense</p></li>
+<li><p>ADJT - Estimate possessions per game a team would have against the average tempo</p></li>
+<li><p>EFG% - Field goal percentage adjusted for value of baskets scored</p></li>
+</ul>
+</section>
+<section id="description-of-data-cleaning" class="level4">
+<h4 class="anchored" data-anchor-id="description-of-data-cleaning"><u>Description of Data Cleaning</u></h4>
+<p>For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First we joined our original <code>cbb</code> dataset with <code>background</code>, both of which we got from Bart Torvik’s analytics website. The latter dataset contained details about each team’s performance in the tournament for the relevant years. The observations of teams that did not make the Round of 64 for their tournament were then removed to focus on further prediction.</p>
+<p>We also abbreviated each of the outcomes in the <code>march_madness</code> variable. Then, we joined the <code>cbb</code> and the <code>sportsreference</code> datasets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e.&nbsp;F4 instead of Final Four). Each round was split up to its own variable and dataset which showed the success of each team in each round (e.g.&nbsp;win or loss in the Round of 32). Finally, we created the <code>mm_WINS</code> variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the <code>march_madness</code> variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.</p>
+</section>
+<section id="exploratory-data-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="exploratory-data-analysis"><u>Exploratory Data Analysis</u></h4>
+<p><strong>MAYBE ADD ONE MORE EDA</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cbb <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mm_WINS =</span> <span class="fu">case_when</span>(march_madness <span class="sc">==</span> <span class="st">"R64"</span> <span class="sc">~</span> <span class="dv">0</span>, march_madness <span class="sc">==</span><span class="st">"R32"</span> <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                             march_madness <span class="sc">==</span> <span class="st">"E16"</span> <span class="sc">~</span> <span class="dv">2</span>, march_madness <span class="sc">==</span> <span class="st">"E8"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                             march_madness <span class="sc">==</span> <span class="st">"F4"</span> <span class="sc">~</span> <span class="dv">4</span>, march_madness <span class="sc">==</span> <span class="st">"2ND"</span> <span class="sc">~</span> <span class="dv">5</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                             march_madness <span class="sc">==</span> <span class="st">"Champions"</span> <span class="sc">~</span> <span class="dv">6</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 896 × 38
+      RK TEAM      G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`   TOR  TORD   ORB
+   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1   265 Pacific    28     9     19  97   106.    46.5    51.1  18.8  20.4  29.5
+ 2   291 North …    29     9     20  93.3 104.    47.4    49.9  21.6  22.2  29.3
+ 3   131 Drexel     19    12      7 106.  104.    54.3    49.6  19.6  16.4  29.4
+ 4   142 Iona       17    12      5 101.   98.8   51.2    45.6  22.5  19.6  33.5
+ 5   194 Cal Po…    32    12     20 103.  105     46      49.3  14.7  18.1  30.9
+ 6   229 James …    32    12     20 100.  106.    49.2    49.3  19.4  20.3  29.1
+ 7    56 George…    25    13     12 107.   93.7   49.6    48    21.7  16.2  32.4
+ 8    71 Villan…    32    13     19 109.   98.1   46.5    47.5  20.4  17.2  37.6
+ 9   156 Oral R…    23    13     10 108.  107.    53.6    50.4  15.7  18.2  23.2
+10   235 Northw…    29    13     16  95.5 101.    47.2    47.7  20.5  22.7  31.9
+# … with 886 more rows, and 26 more variables: DRB &lt;dbl&gt;, FTR &lt;dbl&gt;,
+#   FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;, `3P%D` &lt;dbl&gt;,
+#   `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, YEAR &lt;dbl&gt;, march_madness &lt;chr&gt;,
+#   Conference &lt;chr&gt;, G.y &lt;dbl&gt;, `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;,
+#   `Overall SOS` &lt;dbl&gt;, `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;,
+#   `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;, `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;,
+#   `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, mm_WINS &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cbb, <span class="fu">aes</span>(<span class="at">x =</span> Conference, <span class="at">y =</span> mm_WINS, <span class="at">fill =</span> Conference)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Conference"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Wins"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Major Conferences Dominate Wins in March Madness"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project_files/figure-html/EDA-conferences-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cbb <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(<span class="at">select =</span> <span class="fu">c</span>(ADJOE, ADJDE, TOR, TORD, <span class="st">`</span><span class="at">ADJ T</span><span class="st">`</span>, <span class="st">`</span><span class="at">EFG%</span><span class="st">`</span>, march_madness)) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(march_madness) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ADJOE =</span> <span class="fu">mean</span>(ADJOE),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">ADJDE =</span> <span class="fu">mean</span>(ADJDE),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">TOR =</span> <span class="fu">mean</span>(TOR),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">TORD =</span> <span class="fu">mean</span>(TORD),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">ADJT =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">ADJ T</span><span class="st">`</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">EFG%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">EFG%</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(ADJOE, ADJDE, TOR, TORD, ADJT, <span class="st">`</span><span class="at">EFG%</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(march_madness <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"R64"</span>, <span class="st">"S16"</span>, <span class="st">"F4"</span>, <span class="st">"Champions"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> value, <span class="at">fill =</span> march_madness)) <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Round-Wise Stats Trends for March Madness"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Key Variable"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average by Round"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend =</span> <span class="st">"March Madness Round"</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="methodology" class="level1">
+<h1><u>Methodology</u></h1>
+<div class="cell">
+
+</div>
+<section id="round-by-round-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="round-by-round-logistic-regression"><u>Round-by-Round Logistic Regression</u></h2>
+<p>The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. We put every variable from our dataset into the logisitic regression, with the interaction terms based on variables that would be considered to be differential statistics (i.e.&nbsp;3P% and 3P%D interact for 3-Pointer % Differential). The number of variables was then reduced to those considered appropriate using stepAIC works to attempt to limit the overfitting with the data. The stepAIC function was implemented starting at the upper model and going both directions. There is a potential problem in using glm fits with a variable scale, as in that case the deviance is not simply related to the maximized log-likelihood.</p>
+<p>We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not. For example round_64 measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament – we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>round_64 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(round_64)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>round_64_max <span class="ot">&lt;-</span> <span class="fu">glm</span>(round_64 <span class="sc">~</span> G.x <span class="sc">+</span> ADJOE <span class="sc">+</span> ADJDE <span class="sc">+</span> <span class="st">`</span><span class="at">EFG%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">EFGD%</span><span class="st">`</span> <span class="sc">+</span> TOR <span class="sc">+</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                      TORD <span class="sc">+</span> ORB <span class="sc">+</span> DRB <span class="sc">+</span> FTR <span class="sc">+</span> FTRD <span class="sc">+</span> <span class="st">`</span><span class="at">2P%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">2P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3P%</span><span class="st">`</span> <span class="sc">+</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                      <span class="st">`</span><span class="at">3P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3PR</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3PRD</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">ADJ T</span><span class="st">`</span> <span class="sc">+</span><span class="st">`</span><span class="at">Conf. W-L%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">Home W-L%</span><span class="st">`</span> <span class="sc">+</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                      <span class="st">`</span><span class="at">Away W-L%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">AVG PPG</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">AVG DPPG</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">AVG PD</span><span class="st">`</span> <span class="sc">+</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                      <span class="st">`</span><span class="at">AST/TOV</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">PF/G</span><span class="st">`</span> <span class="sc">+</span> ADJOE<span class="sc">*</span>ADJDE <span class="sc">+</span> <span class="st">`</span><span class="at">EFG%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">EFGD%</span><span class="st">`</span> <span class="sc">+</span> TOR<span class="sc">*</span>TORD <span class="sc">+</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                      ORB<span class="sc">*</span>DRB <span class="sc">+</span> FTR<span class="sc">*</span>FTRD <span class="sc">+</span> <span class="st">`</span><span class="at">2P%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">2P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3P%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3PR</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3PRD</span><span class="st">`</span> <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                      <span class="st">`</span><span class="at">2P%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3P%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">2P%D</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">AVG PPG</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">AVG DPPG</span><span class="st">`</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> round_64,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>round_64_min <span class="ot">&lt;-</span> <span class="fu">glm</span>(round_64 <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> round_64,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>round_64_model <span class="ot">&lt;-</span> <span class="fu">stepAIC</span>(round_64_max,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">scope =</span> <span class="fu">list</span>(<span class="at">lower =</span> round_64_min, <span class="at">upper =</span> round_64_max),</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> round_64, <span class="at">direction =</span> <span class="st">"both"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<section id="assumptions" class="level4">
+<h4 class="anchored" data-anchor-id="assumptions"><u>Assumptions</u></h4>
+<p>As discussed earlier, the independence assumption for the data cannot be well-assumed. There is also a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emplogitplot1</span>(round_64 <span class="sc">~</span> ADJOE, <span class="at">data =</span> round_64, <span class="at">ngroups =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emplogitplot1</span>(round_32 <span class="sc">~</span> ADJDE, <span class="at">data =</span> round_32, <span class="at">ngroups =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emplogitplot1</span>(sweet_sixteen <span class="sc">~</span> TORD, <span class="at">data =</span> sweet_sixteen, <span class="at">ngroups =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="project_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>As can be seen above with just a few of the variables from each of the model, the linearity assumption does seem like it can be quite well assumed. We checked most of the variables and saw similar linearity assumptions to be well-assumed, but for the sake of space are just showing this small subset.</p>
+</section>
+</section>
+<section id="overall-ordinal-regression" class="level2">
+<h2 class="anchored" data-anchor-id="overall-ordinal-regression"><u>Overall Ordinal Regression</u></h2>
+<p>We chose to complete an ordinal regression model as each of the progressing rounds of the tournament are in an ordinal progession. The variables used in the model were those that consistently showed up in the Round of 64, Round of 32, and Sweet Sixteen models after running the StepAIC function, meaning they can confidently be thought as meaningful predictors of success in the rounds of March Madness.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cbb<span class="sc">$</span>march_madness <span class="ot">&lt;-</span> <span class="fu">fct_relevel</span>(cbb<span class="sc">$</span>march_madness, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">c</span>(<span class="st">"R64"</span>, <span class="st">"R32"</span>, <span class="st">"S16"</span>, <span class="st">"E8"</span>, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"F4"</span>, <span class="st">"2ND"</span>, <span class="st">"Champions"</span>))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>mmb_ord_model <span class="ot">&lt;-</span> <span class="fu">polr</span>(march_madness <span class="sc">~</span> ADJOE <span class="sc">+</span> ADJDE <span class="sc">+</span> TORD <span class="sc">+</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                        FTRD <span class="sc">+</span> <span class="st">`</span><span class="at">2P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">AVG PPG</span><span class="st">`</span> <span class="sc">+</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">AVG DPPG</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">PF/G</span><span class="st">`</span>, <span class="at">data =</span> cbb)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mmb_ord_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Re-fitting to get Hessian</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+polr(formula = march_madness ~ ADJOE + ADJDE + TORD + FTRD + 
+    `2P%D` + `3P%D` + `AVG PPG` + `AVG DPPG` + `PF/G`, data = cbb)
+
+Coefficients:
+               Value Std. Error t value
+ADJOE       0.165964    0.01579 10.5136
+ADJDE      -0.228849    0.02414 -9.4790
+TORD        0.035456    0.03449  1.0279
+FTRD        0.067047    0.02809  2.3865
+`2P%D`      0.035198    0.03971  0.8864
+`3P%D`      0.023942    0.04088  0.5857
+`AVG PPG`   0.052121    0.02645  1.9706
+`AVG DPPG` -0.008595    0.03136 -0.2741
+`PF/G`     -0.311339    0.09341 -3.3329
+
+Intercepts:
+              Value     Std. Error t value  
+R64|R32         -0.2630    0.0010  -258.8674
+R32|S16          1.3164    0.0963    13.6647
+S16|E8           2.4566    0.1334    18.4125
+E8|F4            3.3948    0.1726    19.6637
+F4|2ND           4.2343    0.2247    18.8467
+2ND|Champions    5.0224    0.2976    16.8770
+
+Residual Deviance: 2011.75 
+AIC: 2041.75 </code></pre>
+</div>
+</div>
+<p>The assumption required for an ordinal regression is the proportional odds assumption, which applied to this situation is the idea that the same conditional relationship with odds of making it from one round to the next no matter which round that is. This is reasonable due to the fact the proportion of teams that makes it on from one round to the next stays at a constant 50 percent, no matter which round they are participating in.</p>
+</section>
+</section>
+<section id="results" class="level1">
+<h1><u>Results</u></h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">2023sr</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/2023sportsreference.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 363 Columns: 13
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): School
+dbl (12): G, Overall W-L%, Overall SRS, Overall SOS, Conf. W-L%, Home W-L%, ...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">2023analytics</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/2023torvik.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 363 Columns: 22
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): TEAM
+dbl (21): RK, G, WINS, LOSSES, ADJOE, ADJDE, EFG%, EFGD%, TOR, TORD, ORB, DR...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">2023stats</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">left_join</span>(<span class="st">`</span><span class="at">2023analytics</span><span class="st">`</span>, <span class="st">`</span><span class="at">2023sr</span><span class="st">`</span>, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"TEAM"</span> <span class="ot">=</span> <span class="st">"School"</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">2023teams</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/2023teams.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 64 Columns: 1
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (1): TEAM
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">2023stats</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span> <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">2023stats</span><span class="st">`</span><span class="sc">$</span>TEAM <span class="sc">%in%</span> <span class="st">`</span><span class="at">2023teams</span><span class="st">`</span><span class="sc">$</span>TEAM)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="fu">predict</span>(round_64_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">mutate</span>(<span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>, <span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="fu">predict</span>(round_64_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining, by = "rank"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 64 × 36
+   predi…¹  rank    RK TEAM    G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`   TOR
+     &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1    3.59     1     1 Hous…    34    31      3  117.  88     52.7    42.5  15.3
+ 2    3.41     3     3 UCLA     34    29      5  113.  87.4   50.9    46.8  15.3
+ 3    2.50    12    12 San …    32    26      6  111.  90.1   50.1    47.5  17.6
+ 4    2.48     2     2 Alab…    34    29      5  115.  88.3   52.7    41.5  19  
+ 5    2.24     6     6 Purd…    34    29      5  118.  92.6   52.2    47.2  17  
+ 6    2.23    11    11 Marq…    34    28      6  119.  96.1   56      51.1  15.2
+ 7    2.08    13    13 Kans…    34    27      7  113.  91.5   52.4    47.1  17.5
+ 8    1.96     9     9 Texas    34    26      8  115.  91.6   52.7    47.8  16.5
+ 9    1.89     4     4 Tenn…    33    23     10  111.  86.2   50.3    42.4  18.1
+10    1.74     5     5 Conn…    33    25      8  119.  92.5   53.5    45.5  18.9
+# … with 54 more rows, 24 more variables: TORD &lt;dbl&gt;, ORB &lt;dbl&gt;, DRB &lt;dbl&gt;,
+#   FTR &lt;dbl&gt;, FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;,
+#   `3P%D` &lt;dbl&gt;, `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, G.y &lt;dbl&gt;,
+#   `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;, `Overall SOS` &lt;dbl&gt;,
+#   `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;, `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;,
+#   `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;, `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, and
+#   abbreviated variable name ¹​`predict(round_64_model, \`2023stats\`)`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="fu">predict</span>(round_32_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">mutate</span>(<span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>, <span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="fu">predict</span>(round_32_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining, by = "rank"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 64 × 36
+   predi…¹  rank    RK TEAM    G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`   TOR
+     &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1   2.18      1     1 Hous…    34    31      3  117.  88     52.7    42.5  15.3
+ 2   1.50      3     3 UCLA     34    29      5  113.  87.4   50.9    46.8  15.3
+ 3   1.27      2     2 Alab…    34    29      5  115.  88.3   52.7    41.5  19  
+ 4   1.03     10    10 Gonz…    32    27      5  123.  98.6   58.5    51.7  14.6
+ 5   1.00     12    12 San …    32    26      6  111.  90.1   50.1    47.5  17.6
+ 6   0.910     6     6 Purd…    34    29      5  118.  92.6   52.2    47.2  17  
+ 7   0.880    38    42 Penn…    35    22     13  115.  99.9   55.5    49.2  13.7
+ 8   0.853    15    15 Bayl…    32    22     10  121.  99.5   53.1    51.4  18.1
+ 9   0.848     4     4 Tenn…    33    23     10  111.  86.2   50.3    42.4  18.1
+10   0.779    14    14 Crei…    33    21     12  114.  92.8   54.3    47.3  16.6
+# … with 54 more rows, 24 more variables: TORD &lt;dbl&gt;, ORB &lt;dbl&gt;, DRB &lt;dbl&gt;,
+#   FTR &lt;dbl&gt;, FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;,
+#   `3P%D` &lt;dbl&gt;, `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, G.y &lt;dbl&gt;,
+#   `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;, `Overall SOS` &lt;dbl&gt;,
+#   `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;, `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;,
+#   `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;, `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, and
+#   abbreviated variable name ¹​`predict(round_32_model, \`2023stats\`)`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="fu">predict</span>(sweet_sixteen_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">mutate</span>(<span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>, <span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="fu">predict</span>(sweet_sixteen_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining, by = "rank"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 64 × 36
+   predi…¹  rank    RK TEAM    G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`   TOR
+     &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1   2.03      1     1 Hous…    34    31      3  117.  88     52.7    42.5  15.3
+ 2   2.01      6     6 Purd…    34    29      5  118.  92.6   52.2    47.2  17  
+ 3   1.09     22    22 Texa…    34    25      9  113.  94.8   49      47.9  18.3
+ 4   1.03      5     5 Conn…    33    25      8  119.  92.5   53.5    45.5  18.9
+ 5   0.961    38    42 Penn…    35    22     13  115.  99.9   55.5    49.2  13.7
+ 6   0.674    23    23 Aubu…    32    20     12  111.  93.2   49.6    45.6  18.1
+ 7   0.624    13    13 Kans…    34    27      7  113.  91.5   52.4    47.1  17.5
+ 8   0.532     2     2 Alab…    34    29      5  115.  88.3   52.7    41.5  19  
+ 9   0.467    26    26 TCU      33    21     12  110.  93.4   50.2    47.8  17.1
+10   0.449    12    12 San …    32    26      6  111.  90.1   50.1    47.5  17.6
+# … with 54 more rows, 24 more variables: TORD &lt;dbl&gt;, ORB &lt;dbl&gt;, DRB &lt;dbl&gt;,
+#   FTR &lt;dbl&gt;, FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;,
+#   `3P%D` &lt;dbl&gt;, `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, G.y &lt;dbl&gt;,
+#   `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;, `Overall SOS` &lt;dbl&gt;,
+#   `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;, `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;,
+#   `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;, `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, and
+#   abbreviated variable name ¹​`predict(sweet_sixteen_model, \`2023stats\`)`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="fu">predict</span>(mmb_ord_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">mutate</span>(<span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>, <span class="at">rank =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">64</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">predict</span>(mmb_ord_model, <span class="st">`</span><span class="at">2023stats</span><span class="st">`</span>, <span class="at">type =</span> <span class="st">"probs"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining, by = "rank"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 64 × 36
+   predi…¹  rank    RK TEAM    G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`   TOR
+   &lt;fct&gt;   &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1 E8          1     1 Hous…    34    31      3  117.  88     52.7    42.5  15.3
+ 2 S16         3     3 UCLA     34    29      5  113.  87.4   50.9    46.8  15.3
+ 3 S16         5     5 Conn…    33    25      8  119.  92.5   53.5    45.5  18.9
+ 4 S16         4     4 Tenn…    33    23     10  111.  86.2   50.3    42.4  18.1
+ 5 R32         6     6 Purd…    34    29      5  118.  92.6   52.2    47.2  17  
+ 6 R32         2     2 Alab…    34    29      5  115.  88.3   52.7    41.5  19  
+ 7 R32         9     9 Texas    34    26      8  115.  91.6   52.7    47.8  16.5
+ 8 R32        11    11 Marq…    34    28      6  119.  96.1   56      51.1  15.2
+ 9 R32        10    10 Gonz…    32    27      5  123.  98.6   58.5    51.7  14.6
+10 R32         8     8 Sain…    32    25      7  112.  89.1   52.5    46.7  16.4
+# … with 54 more rows, 24 more variables: TORD &lt;dbl&gt;, ORB &lt;dbl&gt;, DRB &lt;dbl&gt;,
+#   FTR &lt;dbl&gt;, FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;,
+#   `3P%D` &lt;dbl&gt;, `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, G.y &lt;dbl&gt;,
+#   `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;, `Overall SOS` &lt;dbl&gt;,
+#   `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;, `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;,
+#   `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;, `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, and
+#   abbreviated variable name ¹​`predict(mmb_ord_model, \`2023stats\`)`</code></pre>
+</div>
+</div>
+<p>The slope coefficient for average points per game for the Sweet Sixteen logistic model is 1.036. Holding all other variables constant, for every one point increase in average points per game, the odds of winning in the Sweet Sixteen is associated with a e^1.036 = 2.818 multiplicative factor on the odds of winning in this round.</p>
+<p>The slope coefficient for average points per game for the ordinal regression model is 0.052121. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e^0.052121 = 1.054 - holding all other predictors in the model constant.</p>
+<section id="predictive-power-via-2023-march-madness-predictions" class="level4">
+<h4 class="anchored" data-anchor-id="predictive-power-via-2023-march-madness-predictions"><u>Predictive Power via 2023 March Madness Predictions</u></h4>
+<p><embed src="NCAA-Tournament-Printable-Bracket-2023.pdf" class="img-fluid"></p>
+<p>The ordinal model was able to predict 23/32 and 12/16 of the teams to make it on to the Round of 32 and Sweet Sixteen, respectively. For comparison, this bracket predicted around the average score of my brackets, which were likely better than average since I grew up a UConn fan and often had them going far. The successes in the earlier rounds fell off onto later rounds, of course due to chance, but possibly also due to quite low levels of data for prediction of success.</p>
+</section>
+<section id="key-results" class="level4">
+<h4 class="anchored" data-anchor-id="key-results"><u><strong>Key Results</strong></u></h4>
+<p>An unsurprising key result found was the randomness of the tournament, with a simple wrong decision in the earlier rounds multiplying into the lack of success for point totals in the later rounds. Based on the variables that ended up being chosen following the StepAIC function, summarizing variables that consider games played and strength of opponents over the season are stronger predictors than some of the overall percentage stats about schedule success (e.g.&nbsp;Home/Away Win %). From the variables that consistently showed up in the logisitic models and were thus used in the ordinal model, there was a higher emphasis on defensive stats compared to those of the offense.</p>
+</section>
+</section>
+<section id="discussion" class="level1">
+<h1><u>Discussion</u></h1>
+<p>Learned about research question</p>
+<p>Analysis limitations and improvements</p>
+<p>Reliability and validity</p>
+<p>appropriateness of the statistical analysis</p>
+<section id="outliers-and-randomness-of-march-madness" class="level2">
+<h2 class="anchored" data-anchor-id="outliers-and-randomness-of-march-madness">Outliers and Randomness of March Madness</h2>
+<p><strong>HYPOTHESIS TESTS</strong></p>
+<p><strong>COOK’S DISTANCE</strong></p>
+<section id="ideas-for-future-work" class="level4">
+<h4 class="anchored" data-anchor-id="ideas-for-future-work"><u><strong>Ideas for Future Work</strong></u></h4>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
