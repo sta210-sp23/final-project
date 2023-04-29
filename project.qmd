@@ -317,7 +317,7 @@ The slope coefficient for average points per game for the ordinal regression mod
 
 **MODEL'S PREDICTIVE POWER**
 
-**DESCRIBE KEY VARIABLES**
+**DESCRIBE KEY RESULTS**
 
 ## Outliers and Randomness of March Madness
 
