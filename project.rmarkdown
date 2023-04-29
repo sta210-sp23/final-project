@@ -29,7 +29,11 @@ library(MASS)
 
 #### [Data]{.underline}
 
+<<<<<<< HEAD
 Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together.
+=======
+Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together. With the nature of March Madness being over time, the data most definitely violates expectations of independence, with similar players, coaches, and more between years, but there would not be a reasonable way to complete such analysis without this independence.
+>>>>>>> d702ec47b09c17ceab3c27c48d100677c6173d65
 
 #### [**Key Variables**]{.underline}
 
@@ -41,7 +45,11 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 -   EFG% - Field goal percentage adjusted for value of baskets scored
 
+<<<<<<< HEAD
 -   
+=======
+#### [Exploratory Data Analysis]{.underline}
+>>>>>>> d702ec47b09c17ceab3c27c48d100677c6173d65
 
 **EXPLORATORY DATA ANALYSIS-Averages for stats---add by year/by round, Averages for winner stats**
 
@@ -212,6 +220,11 @@ The following are the regression models that were found from the three rounds of
 
 ## [Overall Ordinal Regression]{.underline}
 
+<<<<<<< HEAD
+=======
+We chose to complete an ordinal regression model as each of the next levels of the tournament are in an ordinal progession. While each round is a binary outcome (win/lose), the progression of each round is an ordinal progression.
+
+>>>>>>> d702ec47b09c17ceab3c27c48d100677c6173d65
 
 ```{r ordinal-reg}
 
@@ -292,3 +305,31 @@ Normality:
 
 **IDEA'S FOR FUTURE WORK**
 
+<<<<<<< HEAD
+=======
+**EXPLORATORY DATA ANALYSIS-Averages for stats---by round, Averages for winner stats**
+
+
+```{r}
+
+cbb |>
+  subset(select = c(ADJOE, ADJDE, TOR, TORD, `ADJ T`, `EFG%`, march_madness)) |>
+  group_by(march_madness) |>
+  summarize(ADJOE = mean(ADJOE),
+            ADJDE = mean(ADJDE),
+            TOR = mean(TOR),
+            TORD = mean(TORD),
+            ADJT = mean(`ADJ T`),
+            `EFG%` = mean(`EFG%`)) |>
+  pivot_longer(cols = c(ADJOE, ADJDE, TOR, TORD, ADJT, `EFG%`)) |>
+  subset(march_madness %in% c("R64", "S16", "F4", "Champions")) |>
+  ggplot(aes(x = name, y = value, fill = march_madness)) +
+  geom_col(position = "dodge") +
+  labs(
+    x = "Key Variable",
+    y = "Average by Round",
+    legend = "March Madness Round"
+  )
+```
+
+>>>>>>> d702ec47b09c17ceab3c27c48d100677c6173d65
