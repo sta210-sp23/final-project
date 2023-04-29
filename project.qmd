@@ -315,8 +315,6 @@ The slope coefficient for average points per game for the Sweet Sixteen logistic
 
 The slope coefficient for average points per game for the ordinal regression model is 0.052121. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e\^0.052121 = 1.054 - holding all other predictors in the model constant.
 
-**ADD ASSUMPTIONS**
-
 **MODEL'S PREDICTIVE POWER**
 
 **DESCRIBE KEY VARIABLES**
