@@ -137,8 +137,6 @@ cbb |>
 
 # [Methodology]{.underline}
 
-We determined it would be best to try different regressions, with logistic regressions by round and an ordinal regression---each with their different assumptions to look into. The issue with the first of these is the low levels of data that limit the creation of a model beyond around the Elite Eight. In preparing for the round-by-round logistic regressions we split up the data from the original data sets into multiple data sets for each round, with a TRUE or FALSE value of whether they won their game in that round. We chose variables that were determined to be influential for a team based on their regular season performance on March Madness success, with the interaction terms based on variables that would be considered to be differential statistics (i.e. 3P% and 3P%D interact for 3-Pointer % Differential).
-
 
 ```{r round-separation, echo = FALSE}
 
@@ -180,7 +178,7 @@ champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
 
 ## [Round-by-Round Logistic Regression]{.underline}
 
-The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. Using stepAIC works to attempt to limit the overfitting with the data. This was also done for the Round of 32 and Sweet Sixteen.
+The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. We put every variable from our dataset into the logisitic regression, with the interaction terms based on variables that would be considered to be differential statistics (i.e. 3P% and 3P%D interact for 3-Pointer % Differential). The number of variables was then reduced to those considered appropriate using stepAIC works to attempt to limit the overfitting with the data. The stepAIC function was implemented starting at the upper model and going both directions. There is a potential problem in using glm fits with a variable scale, as in that case the deviance is not simply related to the maximized log-likelihood.
 
 We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not. For example round_64 measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament -- we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).
 
@@ -189,14 +187,12 @@ We chose to do a logistic model because our outcome variable is whether they had
 
 round_64 <- na.omit(round_64)
 
-round_64_max <- glm(round_64 ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
-                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
-                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+round_64_max <- glm(round_64 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
+                      TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
+                      `3P%D` + `3PR` + `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
                       `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
-                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
-                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
-                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                       data = round_64,
                       family = "binomial")
@@ -212,14 +208,12 @@ round_64_model <- stepAIC(round_64_max,
 
 ```{r round-32-model, echo = FALSE, results = "hide"}
 
-round_32_max <- glm(round_32 ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
-                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
-                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+round_32_max <- glm(round_32 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
+                      TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
+                      `3P%D` + `3PR` + `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
                       `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
-                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
-                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
-                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                     data = round_32,
                     family = "binomial")
@@ -236,14 +230,12 @@ round_32_model <- stepAIC(round_32_max,
 
 ```{r sweet-sixteen-model, echo = FALSE, results = "hide"}
 
-sweet_sixteen_max <- glm(sweet_sixteen ~ G.x + WINS + LOSSES + ADJOE + ADJDE + 
-                      `EFG%` + `EFGD%` + TOR + TORD + ORB + DRB + FTR +
-                      FTRD + `2P%` + `2P%D` + `3P%` + `3P%D` + `3PR` +
-                      `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
+sweet_sixteen_max <- glm(sweet_sixteen ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
+                      TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
+                      `3P%D` + `3PR` + `3PRD` + `ADJ T` +`Conf. W-L%` + `Home W-L%` + 
                       `Away W-L%` + `AVG PPG` + `AVG DPPG` + `AVG PD` + 
-                      `AST/TOV` + `PF/G` + WINS*G.x + LOSSES*G.x + 
-                      ADJOE*ADJDE +`EFG%`*`EFGD%` + TOR*TORD + ORB*DRB + 
-                      FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
+                      `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
+                      ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
                         data = sweet_sixteen,
                         family = "binomial")
@@ -259,7 +251,22 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
 ```
 
 
-The following are the regression models that were found from the three rounds of data and regression models run through stepAIC:
+#### [Assumptions]{.underline}
+
+As discussed earlier, the independence assumption for the data cannot be well-assumed. There is also a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors.
+
+
+```{r}
+
+emplogitplot1(round_64 ~ ADJOE, data = round_64, ngroups = 10)
+ 
+emplogitplot1(round_32 ~ ADJDE, data = round_32, ngroups = 10)
+
+emplogitplot1(sweet_sixteen ~ TORD, data = sweet_sixteen, ngroups = 10)
+```
+
+
+As can be seen above with just a few of the variables from each of the model, the linearity assumption does seem like it can be quite well assumed. We checked most of the variables and saw similar linearity assumptions to be well-assumed, but for the sake of space are just showing this small subset.
 
 ## [Overall Ordinal Regression]{.underline}
 
@@ -278,7 +285,7 @@ mmb_ord_model <- polr(march_madness ~ ADJOE + ADJDE + TORD +
 ```
 
 
-**ADD ASSESSMENT OF CONDITIONS + DIAGNOSTICS**
+The assumption required for an ordinal regression is the proportional odds assumption, which applied to this situation is the idea that the same conditional relationship with odds of making it from one round to the next no matter which round that is. This is reasonable due to the fact the proportion of teams that makes it on from one round to the next stays at a constant 50 percent, no matter which round they are participating in.
 
 # [Results]{.underline}
 

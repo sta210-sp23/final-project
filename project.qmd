@@ -274,7 +274,7 @@ mmb_ord_model <- polr(march_madness ~ ADJOE + ADJDE + TORD +
 summary(mmb_ord_model)
 ```
 
-**ADD ASSESSMENT OF CONDITIONS + DIAGNOSTICS**
+The assumption required for an ordinal regression is the proportional odds assumption, which applied to this situation is the idea that the same conditional relationship with odds of making it from one round to the next no matter which round that is. This is reasonable due to the fact the proportion of teams that makes it on from one round to the next stays at a constant 50 percent, no matter which round they are participating in.
 
 # [Results]{.underline}
 
