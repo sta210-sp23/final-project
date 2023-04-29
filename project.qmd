@@ -30,6 +30,8 @@ Data was found from the [Sports Reference college basketball team stats website]
 
 #### [**Key Variables**]{.underline}
 
+-   march_madness - Our key response variable that states the round each team was able to make it to in their tournament. Our overall goal is to predict this variable for teams in the 2023 March Madness Tournament
+
 -   ADJOE/ADJDE - Points scored per 100 possessions on offense/defense, adjusted for opponent strength and game location
 
 -   TOR/TORD - Turnovers committed/forced per game on offense/defense
@@ -330,6 +332,3 @@ Normality:
 **COOK'S DISTANCE**
 
 **IDEA'S FOR FUTURE WORK**
-
-```{}
-```
