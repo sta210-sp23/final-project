@@ -313,9 +313,9 @@ tibble(predict(mmb_ord_model, `2023stats`)) |>
 
 The slope coefficient for average points per game for the Sweet Sixteen logistic model is 1.036. Holding all other variables constant, for every one point increase in average points per game, the odds of winning in the Sweet Sixteen is associated with a e\^1.036 = 2.818 multiplicative factor on the odds of winning in this round.
 
-The slope coefficient for average points per game for the ordinal regression model is 0.052121. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e\^0.052121 = 1.054 - holding all other predictors in the model constant.
+The slope coefficient for average points per game for the ordinal regression model is 0.052. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e\^0.052 = 1.054 - holding all other predictors in the model constant.
 
-#### [Predictive Power via 2023 March Madness Predictions]{.underline} 
+#### [Predictive Power via 2023 March Madness Predictions]{.underline}
 
 ![](NCAA-Tournament-Printable-Bracket-2023.pdf)
 
@@ -327,18 +327,16 @@ An unsurprising key result found was the randomness of the tournament, with a si
 
 # [Discussion]{.underline}
 
-Learned about research question
+The variables that we noted to be most important were summary statistics about a team's offensive and defensive capabilities, specifically around shooting and when accounting into the strength of opponents. This led into ADJOE, ADJDE, and PPG Scored and Allowed being important variables for the model. Based on the predictions for this year, the suprise team was FAU, who was able to make the Final Four despite being predicted to lose in the Round of 64 against Memphis by both the ordinal and Round of 64 logistic regression.
 
-Analysis limitations and improvements
+```{r}
 
-Reliability and validity
+#need to find Cook's distance equivalent for polr models
+#influence.measures(mmb_ord_model)
+```
 
-appropriateness of the statistical analysis
-
-## Outliers and Randomness of March Madness
-
-**HYPOTHESIS TESTS**
-
-**COOK'S DISTANCE**
+Among the issues of our analysis is the glaring lack of independence between observations that would be required for many of the regressions used for prediction. As STA 210 students, our statistical toolkit does not yet have the necessary knowledge to deal with these issues of time-related data, so hopefully as it expands in further classes we will be able to come back and solve some of the issues with the violations. Possible issues with the model could include a lack of importance placed on the recent due to the stats used being from the season as a whole, thus injuries and general performance boosts lack as much influence as might be needed. There is also a small subset of data that is available to us, such as not much being known about the types of shots each team is taking, which could be important to the micro-level analysis of teams.
 
 #### [**Ideas for Future Work**]{.underline}
+
+There are quite a few limitations to the model that can be worked towards and improved for a better analysis. The much repeated violated assumption has been the independence between observations, stemming from similarities between teams and years. There are various ways of dealing with this, which can be further dealt with after adding to our statistical toolkit in courses like STA 344 (Introduction to the Statistical Modeling of Spatial and Time Series Data). The complexities of the real world and March Madness also means that although there is a lot of information being fed into the regression, there are likely still key pieces of data that are not included. Of course, this data could simply be added, or a new more novel strategy could be the use of something like machine learning for a more nuanced prediction with the factors that are found to be important. An interesting outcome which could come from this is its use in areas like sports betting to beat the odds makers and quantify success in yet another way.
