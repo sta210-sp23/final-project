@@ -379,7 +379,7 @@ Some of the other interesting surprises that our model did not get right include
 
 -   15-seed Princeton's upset of 2-seed Arizona: Princeton was ranked as the 55th best team in the tournament. Arizona was predicted to reach the Sweet Sixteen.
 
--   4-seed Tennessee were predicted to play in the National Championship game, but they lost in the Sweet Sixteen as a part of FAU's Cinderella story.
+-   4-seed Tennessee were predicted to play in the National Championship game, but they lost in the Sweet Sixteen as a part of FAU's Cinderella story. Per our model, FAU was ranked as the 25th best team in the tournament.
 
 Among the issues of our analysis is the glaring lack of independence between observations that would be required for many of the regressions used for prediction. As STA 210 students, our statistical toolkit does not yet have the necessary knowledge to deal with these issues of time-related data, so hopefully as it expands in further classes we will be able to come back and solve some of the issues with the violations. Possible issues with the model could include a lack of importance placed on the recent due to the stats used being from the season as a whole, thus injuries and general performance boosts lack as much influence as might be needed. There is also a small subset of data that is available to us, such as not much being known about the types of shots each team is taking, which could be important to the micro-level analysis of teams.
 
