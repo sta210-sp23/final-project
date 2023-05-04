@@ -28,7 +28,7 @@ library(gridExtra)
 
 #### [Data]{.underline}
 
-```{r load-data, echo = FALSE, message = FALSE}
+```{r load-data, message = FALSE, warning = FALSE, echo = FALSE}
 
 cbb <- read_csv("data/20082022torvik.csv") 
 sportsreference <- read_csv("data/sportsreference.csv")
@@ -85,7 +85,7 @@ We also abbreviated each of the outcomes in the `march_madness` variable. Then, 
 
 #### [Exploratory Data Analysis]{.underline}
 
-```{r EDA-conferences, echo = FALSE, fig.width = 13}
+```{r EDA-conferences-stats-by-round, message = FALSE, warning = FALSE, echo = FALSE, fig.width = 13}
 
 cbb <- cbb |>
   mutate(mm_WINS = case_when(march_madness == "R64" ~ 0, march_madness =="R32" ~ 1, 
@@ -132,7 +132,7 @@ nrow = 1)
 
 ## [Methodology]{.underline}
 
-```{r round-separation, echo = FALSE}
+```{r round-separation, message = FALSE, warning = FALSE, echo = FALSE}
 
 #separated each row by round for determining differences
 cbb_r <- mutate(cbb, round_64 = if_else(march_madness == "R64", FALSE, TRUE))
@@ -175,7 +175,7 @@ The following is an example of the regression that was run on all of the Round o
 
 We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not (binary response variable). The round_64 variable measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament---we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).
 
-```{r round-64-model, results = "hide"}
+```{r round-64-model-creation, message = FALSE, warning = FALSE, results = "hide"}
 
 round_64_data <- na.omit(round_64_data)
 
@@ -200,7 +200,7 @@ round_64_model <- stepAIC(round_64_max,
 summary(round_64_model)
 ```
 
-```{r round-32-model, echo = FALSE, results = "hide"}
+```{r round-32-model-creation, message = FALSE, warning = FALSE, echo = FALSE, results = "hide"}
 
 round_32_max <- glm(round_32 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
                       TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
@@ -222,7 +222,7 @@ round_32_model <- stepAIC(round_32_max,
         data = round_32_data, direction = "both")
 ```
 
-```{r sweet-sixteen-model, echo = FALSE, results = "hide"}
+```{r sweet-sixteen-model-creation, message = FALSE, warning = FALSE, echo = FALSE, results = "hide"}
 
 sweet_sixteen_max <- glm(sweet_sixteen ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
                       TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
@@ -248,7 +248,7 @@ sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
 
 As discussed earlier, the independence assumption for the data cannot be well-assumed due to temporal connections, and we soon hope to be able to have ways to solve such issues in our statistical toolkit. Logistic regressions also have a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors:
 
-```{r echo = FALSE}
+```{r logistic-linearity, message = FALSE, warning = FALSE, echo = FALSE}
 #| layout-ncol: 3
 
 emplogitplot1(round_64 ~ ADJOE, data = round_64_data, ngroups = 10, 
@@ -267,7 +267,7 @@ As can be seen above with just a few of the variables from each of the model, th
 
 We chose to complete an ordinal regression model as each of the progressing rounds of the tournament are in an ordinal progession. The variables used in the model were those that consistently showed up in the Round of 64, Round of 32, and Sweet Sixteen models after running the StepAIC function, meaning they can confidently be thought as meaningful predictors of success throughout multiple rounds of March Madness.
 
-```{r ordinal-reg, message = FALSE, echo = FALSE}
+```{r ordinal-reg-creation, message = FALSE, warning = FALSE, echo = FALSE}
 
 cbb$march_madness <- fct_relevel(cbb$march_madness, 
                                  c("R64", "R32", "S16", "E8", 
@@ -286,7 +286,7 @@ The assumption required for an ordinal regression is the proportional odds assum
 
 For checking the results, we got this year's data from Sports Reference and Bart Torovik's website and joined and cleaned then in the same way as done for the other years. The predict function was then called on these, leaving the following log-odds for the rounds and ordinal regression.
 
-```{r predictions, message = FALSE, echo = FALSE}
+```{r predictions_data, message = FALSE, warning = FALSE, echo = FALSE}
 
 `2023sr` <- read_csv("data/2023sportsreference.csv")
 `2023analytics` <- read_csv("data/2023torvik.csv")
@@ -301,7 +301,7 @@ For checking the results, we got this year's data from Sports Reference and Bart
 
 #### [Round of 64 Predictions]{.underline}
 
-```{r message = FALSE, echo = FALSE}
+```{r round_64_predictions, message = FALSE, warning = FALSE, echo = FALSE}
 
 tibble(predict(round_64_model, `2023stats`)) |>
   mutate(prob = exp(predict(round_64_model, `2023stats`))/
@@ -315,7 +315,7 @@ tibble(predict(round_64_model, `2023stats`)) |>
 
 #### [Round of 32 Predictions]{.underline}
 
-```{r warning = FALSE, message = FALSE, echo = FALSE}
+```{r round-32-predictions, message = FALSE, warning = FALSE, echo = FALSE}
 
 tibble(predict(round_32_model, `2023stats`)) |>
   mutate(prob = exp(predict(round_32_model, `2023stats`))/
@@ -329,7 +329,7 @@ tibble(predict(round_32_model, `2023stats`)) |>
 
 #### [Sweet Sixteen Predictions]{.underline}
 
-```{r message = FALSE, echo = FALSE}
+```{r sweet-sixteen-predictions, message = FALSE, warning = FALSE, echo = FALSE}
 
 tibble(predict(sweet_sixteen_model, `2023stats`)) |>
   mutate(prob = exp(predict(sweet_sixteen_model, `2023stats`))/
@@ -343,7 +343,7 @@ tibble(predict(sweet_sixteen_model, `2023stats`)) |>
 
 #### [Ordinal Regression Predictions]{.underline}
 
-```{r message = FALSE, echo = FALSE}
+```{r ord-reg-predictions, message = FALSE, warning = FALSE, echo = FALSE}
 
 ordinal_probs <- as.data.frame(predict(mmb_ord_model, `2023stats`, type = "probs")) |>
   mutate(rank = seq(1:64)) |>
