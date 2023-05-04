@@ -61,28 +61,27 @@ cbb <- cbb |>
                              march_madness == "E16" ~ 2, march_madness == "E8" ~ 3,
                              march_madness == "F4" ~ 4, march_madness == "2ND" ~ 5,
                              march_madness == "Champions" ~ 6, TRUE ~ 0))
-
 ```
 
-Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). Both of these sources allow for easy copy + pasting of CSV files with the annual stats for each team and their tournament performance. From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together. With the nature of March Madness being over time, the data most definitely violates expectations of independence, with similar players, coaching staff, and more factors between years. However, there would not be a reasonable way to complete such analysis without this independence.
+Data was found from the [Sports Reference college basketball team stats website](https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html) and [Bart Torvik analytics website](https://barttorvik.com/#), with these general and deeper stats and team information being taken going back to 2008 (excluding the canceled March Madness of 2020). Both of these sources allow for easy copy + pasting of CSV files with the annual stats for each team and their tournament performance. This data combined had `r nrow(sportsreference)` observations for each Division I team over this time period and a `r ncol(cbb)+ncol(sportsreference)+ncol(background)-4`. Then, the data in `background` was cleaned in Excel to separate the combined cell with year and result of each team and joined from both sources into one. Nearly all of the information is quantitative in nature, except for conference. With the nature of March Madness being over time, the data most definitely violates temporal expectations of independence, with similar players, coaching staff, and more factors between years. However, there would not be a reasonable way to complete such analysis without this independence.
 
 #### [Key Variables]{.underline}
 
--   march_madness - Our key response variable that states the round each team was able to make it to in their tournament. Our overall goal is to predict this variable for teams in the 2023 March Madness Tournament
+-   march_madness - Our key response variable that states the round each team was able to make it to in their tournament. Our overall goal is to predict this variable for teams in the 2023 March Madness Tournament with the data we have from previous years.
 
 -   ADJOE/ADJDE - Points scored per 100 possessions on offense/defense, adjusted for opponent strength and game location
 
 -   TOR/TORD - Turnovers committed/forced per game on offense/defense
 
--   ADJT - Estimate possessions per game a team would have against the average tempo
+-   ADJT - Estimated possessions per game a team would have against the average tempo
 
 -   EFG% - Field goal percentage adjusted for value of baskets scored
 
 #### [Description of Data Cleaning]{.underline}
 
-For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First we joined our original `cbb` dataset with `background`, both of which we got from Bart Torvik's analytics website. The latter dataset contained details about each team's performance in the tournament for the relevant years. The observations of teams that did not make the Round of 64 for their tournament were then removed to focus on further prediction.
+For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First, we joined our original `cbb` data set with `background`, both of which we got from Bart Torvik's analytics website. The latter data set contained details about each team's performance in the tournament for the relevant years. The observations of teams that did not make the Round of 64 for their tournament were then removed to focus on further prediction of specifically March Madness, as opposed to Division I basketball as a whole.
 
-We also abbreviated each of the outcomes in the `march_madness` variable. Then, we joined the `cbb` and the `sportsreference` datasets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e. F4 instead of Final Four). Each round was split up to its own variable and dataset which showed the success of each team in each round (e.g. win or loss in the Round of 32). Finally, we created the `mm_WINS` variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the `march_madness` variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.
+We also abbreviated each of the outcomes in the `march_madness` variable. Then, we joined the `cbb` and the `sportsreference` data sets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e. F4 instead of Final Four). Each round was split up into its own variable and data set which showed the success of each team in each round (e.g. win or loss in the Round of 32), which would allow for each regression conducted later on to have its own data set. Finally, we created the `mm_WINS` variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the `march_madness` variable and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.
 
 #### [Exploratory Data Analysis]{.underline}
 
@@ -98,14 +97,15 @@ cbb <- cbb |>
   mutate(big_6 = case_when(Conference %in% c("SEC", "P12", "BE", "B10", "B12", "ACC") ~ TRUE,
          TRUE ~ FALSE))
 
-grid.arrange(ggplot(cbb, aes(y = Conference, x = mm_WINS, fill = big_6)) +
+grid.arrange(ggplot(cbb, aes(y = fct_rev(Conference), 
+                             x = mm_WINS, fill = big_6)) +
   geom_col() +
   theme(legend.position = "none") +
   scale_fill_manual(values = c("gray", "red")) +
   labs(
     x = "Conference",
     y = "Wins",
-    title = "Major Conferences Dominate Wins in March Madness"
+    title = "Major Conferences Dominate Wins (and Champs)"
   ),
 cbb |>
   subset(select = c(ADJOE, ADJDE, TOR, TORD, `ADJ T`, `EFG%`, march_madness)) |>
@@ -118,7 +118,8 @@ cbb |>
             `EFG%` = mean(`EFG%`)) |>
   pivot_longer(cols = c(ADJOE, ADJDE, TOR, TORD, ADJT, `EFG%`)) |>
   subset(march_madness %in% c("R64", "S16", "F4", "Champions")) |>
-  ggplot(aes(x = name, y = value, fill = march_madness)) +
+  ggplot(aes(x = name, y = value, fill = fct_relevel(march_madness, "R64", "S16", "F4", 
+                                                     "Champions"))) +
   geom_col(position = "dodge") +
   labs(
     title = "Round-Wise Stats Trends for March Madness",
@@ -135,48 +136,48 @@ nrow = 1)
 
 #separated each row by round for determining differences
 cbb_r <- mutate(cbb, round_64 = if_else(march_madness == "R64", FALSE, TRUE))
-round_64 <- cbb_r
+round_64_data <- cbb_r
 
 cbb_r <- mutate(cbb_r, round_32 = 
          case_when(march_madness == "R32" ~ FALSE,
          march_madness %in% c("S16", "E8", "F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-round_32 <- cbb_r[!is.na(cbb_r$round_32),]
+round_32_data <- cbb_r[!is.na(cbb_r$round_32),]
 
 cbb_r <- mutate(cbb_r, sweet_sixteen = 
          case_when(march_madness == "S16" ~ FALSE,
          march_madness %in% c("E8", "F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-sweet_sixteen <- cbb_r[!is.na(cbb_r$sweet_sixteen),]
+sweet_sixteen_data <- cbb_r[!is.na(cbb_r$sweet_sixteen),]
 
 cbb_r <- mutate(cbb_r, elite_eight = 
          case_when(march_madness == "E8" ~ FALSE,
          march_madness %in% c("F4", "2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-elite_eight <- cbb_r[!is.na(cbb_r$elite_eight),]
+elite_eight_data <- cbb_r[!is.na(cbb_r$elite_eight),]
 
 cbb_r <- mutate(cbb_r, final_four = 
          case_when(march_madness == "F4" ~ FALSE,
          march_madness %in% c("2ND", "Champions") ~ TRUE,
          TRUE ~ NA))
-final_four <- cbb_r[!is.na(cbb_r$final_four),]
+final_four_data <- cbb_r[!is.na(cbb_r$final_four),]
 
 cbb_r <- mutate(cbb_r, champ_game = 
          case_when(march_madness == "2ND" ~ FALSE,
          march_madness %in% c("Champions") ~ TRUE,
          TRUE ~ NA))
-champ_game <- cbb_r[!is.na(cbb_r$champ_game),]
+champ_game_data <- cbb_r[!is.na(cbb_r$champ_game),]
 ```
 
 ### [Round-by-Round Logistic Regression]{.underline}
 
-The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. We put every variable from our dataset into the logisitic regression, with the interaction terms based on variables that would be considered to be differential statistics (i.e. 3P% and 3P%D interact for 3-Pointer % Differential). The number of variables was then reduced to those considered appropriate using stepAIC works to attempt to limit the overfitting with the data. The stepAIC function was implemented starting at the upper model and going both directions. There is a potential problem in using glm fits with a variable scale, as in that case the deviance is not simply related to the maximized log-likelihood.
+The following is an example of the regression that was run on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. It is followed by the Round of 64 model output We put every variable from our data set into the logistic regression, with the interaction terms based on variables that would be considered to be differential team statistics (i.e. 3P% and 3P%D interact for 3-Pointer % Differential). The number of variables was then reduced to those considered appropriate using stepAIC works to attempt to limit the overfitting of the data. StepAIC was chosen due to AIC's ability to compare different models and the function's easy implementation as a model. The stepAIC function was implemented starting at the upper model and going in both directions. However, the stepAIC function has a potential problem in using glm fits since in that case the deviance is not simply related to the maximized log-likelihood.
 
-We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not (binary response variable). For example round_64 measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament -- we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).
+We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not (binary response variable). The round_64 variable measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament---we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).
 
 ```{r round-64-model, results = "hide"}
 
-round_64 <- na.omit(round_64)
+round_64_data <- na.omit(round_64_data)
 
 round_64_max <- glm(round_64 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR + 
                       TORD + ORB + DRB + FTR + FTRD + `2P%` + `2P%D` + `3P%` + 
@@ -185,16 +186,18 @@ round_64_max <- glm(round_64 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR +
                       `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
                       ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
-                      data = round_64,
+                      data = round_64_data,
                       family = "binomial")
 
 round_64_min <- glm(round_64 ~ 1,
-                    data = round_64,
+                    data = round_64_data,
                     family = "binomial")
 
 round_64_model <- stepAIC(round_64_max,
         scope = list(lower = round_64_min, upper = round_64_max),
-        data = round_64, direction = "both")
+        data = round_64_data, direction = "both")
+
+summary(round_64_model)
 ```
 
 ```{r round-32-model, echo = FALSE, results = "hide"}
@@ -206,17 +209,17 @@ round_32_max <- glm(round_32 ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` + TOR +
                       `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
                       ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
-                    data = round_32,
+                    data = round_32_data,
                     family = "binomial")
 
 round_32_min <- glm(round_32 ~ 1,
-                    data = round_32,
+                    data = round_32_data,
                     family = "binomial")
 
 round_32_model <- stepAIC(round_32_max,
         scope = list(lower = round_32_min, 
                      upper = round_32_max),
-        data = round_32, direction = "both")
+        data = round_32_data, direction = "both")
 ```
 
 ```{r sweet-sixteen-model, echo = FALSE, results = "hide"}
@@ -228,35 +231,33 @@ sweet_sixteen_max <- glm(sweet_sixteen ~ G.x + ADJOE + ADJDE + `EFG%` + `EFGD%` 
                       `AST/TOV` + `PF/G` + ADJOE*ADJDE + `EFG%`*`EFGD%` + TOR*TORD + 
                       ORB*DRB + FTR*FTRD + `2P%`*`2P%D` + `3P%`*`3P%D` + `3PR`*`3PRD` +
                       `2P%`*`3P%` + `2P%D`*`3P%D` + `AVG PPG`*`AVG DPPG`,
-                        data = sweet_sixteen,
+                        data = sweet_sixteen_data,
                         family = "binomial")
 
 sweet_sixteen_min <- glm(sweet_sixteen ~ 1,
-                    data = sweet_sixteen,
+                    data = sweet_sixteen_data,
                     family = "binomial")
 
 sweet_sixteen_model <- stepAIC(sweet_sixteen_max,
         scope = list(lower = sweet_sixteen_min,
                      upper = sweet_sixteen_max),
-        data = sweet_sixteen, direction = "both")
-
-
+        data = sweet_sixteen_data, direction = "both")
 ```
 
 #### [Assumptions]{.underline}
 
-As discussed earlier, the independence assumption for the data cannot be well-assumed. There is also a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors.
+As discussed earlier, the independence assumption for the data cannot be well-assumed due to temporal connections, and we soon hope to be able to have ways to solve such issues in our statistical toolkit. Logistic regressions also have a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors:
 
 ```{r echo = FALSE}
 #| layout-ncol: 3
 
-emplogitplot1(round_64 ~ ADJOE, data = round_64, ngroups = 10, 
+emplogitplot1(round_64 ~ ADJOE, data = round_64_data, ngroups = 10, 
               main = "Example Linearity for Round of 64 Model")
 
-emplogitplot1(round_32 ~ ADJDE, data = round_32, ngroups = 10, 
+emplogitplot1(round_32 ~ ADJDE, data = round_32_data, ngroups = 10, 
               main = "Example Linearity for Round of 32 Model")
 
-emplogitplot1(sweet_sixteen ~ TORD, data = sweet_sixteen, ngroups = 10, 
+emplogitplot1(sweet_sixteen ~ TORD, data = sweet_sixteen_data, ngroups = 10, 
               main = "Example Linearity for Sweet Sixteen Model")
 ```
 
@@ -264,7 +265,7 @@ As can be seen above with just a few of the variables from each of the model, th
 
 ### [Overall Ordinal Regression]{.underline}
 
-We chose to complete an ordinal regression model as each of the progressing rounds of the tournament are in an ordinal progession. The variables used in the model were those that consistently showed up in the Round of 64, Round of 32, and Sweet Sixteen models after running the StepAIC function, meaning they can confidently be thought as meaningful predictors of success in the rounds of March Madness.
+We chose to complete an ordinal regression model as each of the progressing rounds of the tournament are in an ordinal progession. The variables used in the model were those that consistently showed up in the Round of 64, Round of 32, and Sweet Sixteen models after running the StepAIC function, meaning they can confidently be thought as meaningful predictors of success throughout multiple rounds of March Madness.
 
 ```{r ordinal-reg, message = FALSE, echo = FALSE}
 
@@ -307,19 +308,23 @@ tibble(predict(round_64_model, `2023stats`)) |>
            (1 + exp(predict(round_64_model, `2023stats`)))) |>
   mutate(rank = seq(1:64)) |>
   left_join(mutate(`2023stats`, rank = seq(1:64))) |>
-  arrange(desc(predict(round_64_model, `2023stats`)))
+  arrange(desc(predict(round_64_model, `2023stats`))) |>
+  subset(select = c("TEAM", "predict(round_64_model, `2023stats`)", "prob")) |>
+  slice(1:10)
 ```
 
 #### [Round of 32 Predictions]{.underline}
 
-```{r message = FALSE, echo = FALSE}
+```{r warning = FALSE, message = FALSE, echo = FALSE}
 
 tibble(predict(round_32_model, `2023stats`)) |>
   mutate(prob = exp(predict(round_32_model, `2023stats`))/
            (1 + exp(predict(round_32_model, `2023stats`)))) |>
   mutate(rank = seq(1:64)) |>
   left_join(mutate(`2023stats`, rank = seq(1:64))) |>
-  arrange(desc(predict(round_32_model, `2023stats`)))
+  arrange(desc(predict(round_32_model, `2023stats`))) |>
+  subset(select = c("TEAM", "predict(round_32_model, `2023stats`)", "prob")) |>
+  slice(1:10)
 ```
 
 #### [Sweet Sixteen Predictions]{.underline}
@@ -331,7 +336,9 @@ tibble(predict(sweet_sixteen_model, `2023stats`)) |>
            (1 + exp(predict(sweet_sixteen_model, `2023stats`)))) |>
   mutate(rank = seq(1:64)) |>
   left_join(mutate(`2023stats`, rank = seq(1:64))) |>
-  arrange(desc(predict(sweet_sixteen_model, `2023stats`)))
+  arrange(desc(predict(sweet_sixteen_model, `2023stats`))) |>
+  subset(select = c("TEAM", "predict(sweet_sixteen_model, `2023stats`)", "prob")) |>
+  slice(1:10)
 ```
 
 #### [Ordinal Regression Predictions]{.underline}
@@ -349,40 +356,47 @@ ordinal_probs$E8 <- round(ordinal_probs$E8, 3)
 ordinal_probs$F4 <- round(ordinal_probs$F4, 3)
 ordinal_probs$`2ND` <- round(ordinal_probs$`2ND`, 3)
 ordinal_probs$Champions <- round(ordinal_probs$Champions, 3)
+ordinal_probs$winning_odds <- str_c("+", round(((1/ordinal_probs$Champions) - 1)*100, 0))
 
 ordinal_probs |>
-  subset(select = c(TEAM, R64, R32, S16, E8, F4, `2ND`, Champions)) |>
+  subset(select = c(TEAM, R64, R32, S16, E8, F4, `2ND`, Champions, winning_odds)) |>
   slice(1:10)
 ```
 
-The slope coefficient for average points per game for the Sweet Sixteen logistic model is 1.036. Holding all other variables constant, for every one point increase in average points per game, the odds of winning in the Sweet Sixteen is associated with a e\^1.036 = 2.818 multiplicative factor on the odds of winning in this round.
+All of the variables that ended up in our final ordinal regression model could be considered important, but for the sake of space and ease of understanding the interpretation we are focusing on the `Average PPG` variable.
 
-The slope coefficient for average points per game for the ordinal regression model is 0.052. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e\^0.052 = 1.054 - holding all other predictors in the model constant.
+The slope coefficient for average points per game for the Round of 64 logistic model is 0.396. Holding all other variables constant, for every one point increase in average points per game, the odds of winning in the Sweet Sixteen is associated with a e\^0.396 = 1.486 multiplicative factor on the odds of winning in this round.
+
+The slope coefficient for average points per game for the ordinal regression model is 0.052. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e\^0.052 = 1.054, while holding all other predictors in the model constant.
 
 #### [Predictive Power via 2023 March Madness Predictions]{.underline}
 
-![](NCAA-Tournament-Printable-Bracket-2023.pdf){fig-align="center" width="1833"}
+![](NCAA-Tournament-Printable-Bracket-2023.pdf){fig-align="center" width="2400"}
 
-The ordinal model was able to predict 23/32 and 12/16 of the teams to make it on to the Round of 32 and Sweet Sixteen, respectively. For comparison, this bracket predicted around the average score of our brackets, which were likely better than average since we grew up UConn fans and often had them going far. The successes in the earlier rounds fell off onto later rounds, of course due to chance, but possibly also due to quite low levels of data for prediction of success.
+The ordinal model was able to predict 23/32 and 12/16 of the teams to make it on to the Round of 32 and Sweet Sixteen, respectively. For comparison, this bracket predicted much better than the "people's bracket," which had mainly the higher numbered seeds winning each matchup and all four 1 seeds making the Final Four.
 
 #### [Key Results]{.underline}
 
-An unsurprising key result found was the randomness of the tournament, with a simple wrong decision in the earlier rounds multiplying into the lack of success for point totals in the later rounds. Based on the variables that ended up being chosen following the StepAIC function, summarizing variables that consider games played and strength of opponents over the season are stronger predictors than some of the overall percentage stats about schedule success (e.g. Home/Away Win %). From the variables that consistently showed up in the logisitic models and were thus used in the ordinal model, there was a higher emphasis on defensive stats compared to those of the offense.
+An unsurprising key result found was the randomness of the tournament, with a simple wrong decision in the earlier rounds multiplying into the lack of success for point totals in the later rounds. Based on the variables that ended up being chosen following the StepAIC function, summarizing variables that consider games played and strength of opponents over the season are stronger predictors than some of the overall percentage stats about schedule success (e.g. Home/Away Win %). From the variables that consistently showed up in the logistic models and were thus used in the ordinal model, there was a higher emphasis on defensive stats compared to those of the offense.
 
 ## [Discussion]{.underline}
 
 The variables that we noted to be most important were summary statistics about a team's offensive and defensive capabilities, specifically around shooting and when accounting into the strength of opponents. This led into ADJOE, ADJDE, and PPG Scored and Allowed being important variables for the model. Based on the predictions for this year, the suprise team was Florida Atlantic University, who was able to make the Final Four despite being predicted to lose in the Round of 64 against Memphis by both the ordinal and Round of 64 logistic regression. Our model did, unfortunately, predict Duke losing to Tennessee in the Round of 32.
 
-Some of the other interesting surprises that our model did not get right include:
+By running our ordinal model to predict the upsets and cinderella stories of the past 15 years of March Madness we found these outliers:
 
--   16-seed Fairleigh Dickinson's upset of 1-seed Purdue: Our model had Purdue reaching the Sweet Sixteen. Our model also stated that FDU had the lowest probability of winning any game (ranked the worst team in the tournament).
+-   2023 16-seed FDU upsets 1-seed Purdue: Our model also stated that FDU had the lowest probability of winning any game out of ANY team in the last 16 years, yet they pulling off the upset over a strong national title contender
 
--   15-seed Princeton's upset of 2-seed Arizona: Princeton was ranked as the 55th best team in the tournament. Arizona was predicted to reach the Sweet Sixteen.
+-   2022 15-seed Saint Peter's beats 2-seed Kentucky: Kentucky was predicted to be a contender for the national title, while Saint Peter's beat out crazy low odds to make the Elite 8
 
--   4-seed Tennessee were predicted to play in the National Championship game, but they lost in the Sweet Sixteen as a part of FAU's Cinderella story. Per our model, FAU was ranked as the 25th best team in the tournament.
+-   2011 Connecticut's national title: The model left UConn with odds around 1 in 100 to win the tournament, which was the lowest of any winning team in the data set
+
+-   2011 VCU makes the Final Four: It was predicted 1 in 5 for the team to even win their first round game, yet the team was able to make it much further
+
+-   2014 Duke and 2022 UNC: Brutal
 
 Among the issues of our analysis is the glaring lack of independence between observations that would be required for many of the regressions used for prediction. As STA 210 students, our statistical toolkit does not yet have the necessary knowledge to deal with these issues of time-related data, so hopefully as it expands in further classes we will be able to come back and solve some of the issues with the violations. Possible issues with the model could include a lack of importance placed on the recent due to the stats used being from the season as a whole, thus injuries and general performance boosts lack as much influence as might be needed. There is also a small subset of data that is available to us, such as not much being known about the types of shots each team is taking, which could be important to the micro-level analysis of teams.
 
 #### [Ideas for Future Work]{.underline}
 
-There are quite a few limitations to the model that can be worked towards and improved for a better analysis. The much repeated violated assumption has been the independence between observations, stemming from similarities between teams and years. There are various ways of dealing with this, which can be further dealt with after adding to our statistical toolkit in courses like STA 344 (Introduction to the Statistical Modeling of Spatial and Time Series Data). The complexities of the real world and March Madness also means that although there is a lot of information being fed into the regression, there are likely still key pieces of data that are not included. Of course, this data could simply be added, or a new more novel strategy could be the use of something like machine learning for a more nuanced prediction with the factors that are found to be important. An interesting outcome which could come from this is its use in areas like sports betting to beat the odds makers and quantify success in yet another way. For the non-gamblers, perhaps another valuable outcome from this analysis could be a potential perfect bracket, winning Warren Buffet's billion-dollar prize.
+There are quite a few limitations to the model that can be worked towards and improved for a better analysis. The much repeated violated assumption has been the independence between observations, stemming from similarities between teams and years. There are various ways of dealing with this, which can be further dealt with after adding to our statistical toolkit in courses like STA 344 (Introduction to the Statistical Modeling of Spatial and Time Series Data). The complexities of the real world and March Madness also means that although there is a lot of information being fed into the regression, there are likely still key pieces of data that are not included. Of course, this data could simply be added, or a new more novel strategy could be the use of something like machine learning for a more nuanced prediction with the factors that are found to be important. In terms of the probabilities, since match-ups and brackets are not being set up against each other, the probabilities of opposing teams winning a game does not add up to 1, which would require setting up a bracket to do. An interesting outcome which could come from this is its use in areas like sports betting to beat the odds makers and quantify success in yet another way. For the non-gamblers, perhaps another valuable outcome from this analysis could be a potential perfect bracket, winning Warren Buffet's billion-dollar prize.

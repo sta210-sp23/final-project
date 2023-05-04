@@ -154,22 +154,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 
 </div>
-<p>Data was found from the <a href="https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html">Sports Reference college basketball team stats website</a> and <a href="https://barttorvik.com/#">Bart Torvik analytics website</a>, with these general and deeper stats being taken going back to 2008 (excluding the cancelled March Madness of 2020). Both of these sources allow for easy copy + pasting of CSV files with the annual stats for each team and their tournament performance. From here, the data was cleaned in Excel to separate the year and result of each team then joined for all of this data together. With the nature of March Madness being over time, the data most definitely violates expectations of independence, with similar players, coaching staff, and more factors between years. However, there would not be a reasonable way to complete such analysis without this independence.</p>
+<p>Data was found from the <a href="https://www.sports-reference.com/cbb/seasons/men/2023-school-stats.html">Sports Reference college basketball team stats website</a> and <a href="https://barttorvik.com/#">Bart Torvik analytics website</a>, with these general and deeper stats and team information being taken going back to 2008 (excluding the canceled March Madness of 2020). Both of these sources allow for easy copy + pasting of CSV files with the annual stats for each team and their tournament performance. This data combined had 4878 observations for each Division I team over this time period and a 52. Then, the data in <code>background</code> was cleaned in Excel to separate the combined cell with year and result of each team and joined from both sources into one. Nearly all of the information is quantitative in nature, except for conference. With the nature of March Madness being over time, the data most definitely violates temporal expectations of independence, with similar players, coaching staff, and more factors between years. However, there would not be a reasonable way to complete such analysis without this independence.</p>
 </section>
 <section id="key-variables" class="level4">
 <h4 class="anchored" data-anchor-id="key-variables"><u>Key Variables</u></h4>
 <ul>
-<li><p>march_madness - Our key response variable that states the round each team was able to make it to in their tournament. Our overall goal is to predict this variable for teams in the 2023 March Madness Tournament</p></li>
+<li><p>march_madness - Our key response variable that states the round each team was able to make it to in their tournament. Our overall goal is to predict this variable for teams in the 2023 March Madness Tournament with the data we have from previous years.</p></li>
 <li><p>ADJOE/ADJDE - Points scored per 100 possessions on offense/defense, adjusted for opponent strength and game location</p></li>
 <li><p>TOR/TORD - Turnovers committed/forced per game on offense/defense</p></li>
-<li><p>ADJT - Estimate possessions per game a team would have against the average tempo</p></li>
+<li><p>ADJT - Estimated possessions per game a team would have against the average tempo</p></li>
 <li><p>EFG% - Field goal percentage adjusted for value of baskets scored</p></li>
 </ul>
 </section>
 <section id="description-of-data-cleaning" class="level4">
 <h4 class="anchored" data-anchor-id="description-of-data-cleaning"><u>Description of Data Cleaning</u></h4>
-<p>For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First we joined our original <code>cbb</code> dataset with <code>background</code>, both of which we got from Bart Torvik’s analytics website. The latter dataset contained details about each team’s performance in the tournament for the relevant years. The observations of teams that did not make the Round of 64 for their tournament were then removed to focus on further prediction.</p>
-<p>We also abbreviated each of the outcomes in the <code>march_madness</code> variable. Then, we joined the <code>cbb</code> and the <code>sportsreference</code> datasets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e.&nbsp;F4 instead of Final Four). Each round was split up to its own variable and dataset which showed the success of each team in each round (e.g.&nbsp;win or loss in the Round of 32). Finally, we created the <code>mm_WINS</code> variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the <code>march_madness</code> variable, and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.</p>
+<p>For further cleaning, the non-March Madness teams added in the join were removed and simple variable names and values were cleaned up to be easier to work with. First, we joined our original <code>cbb</code> data set with <code>background</code>, both of which we got from Bart Torvik’s analytics website. The latter data set contained details about each team’s performance in the tournament for the relevant years. The observations of teams that did not make the Round of 64 for their tournament were then removed to focus on further prediction of specifically March Madness, as opposed to Division I basketball as a whole.</p>
+<p>We also abbreviated each of the outcomes in the <code>march_madness</code> variable. Then, we joined the <code>cbb</code> and the <code>sportsreference</code> data sets by team and year to aggregate all of the statistics and data that were interested in analyzing. For the round each team made it to, the values were shortened to a shorter form (i.e.&nbsp;F4 instead of Final Four). Each round was split up into its own variable and data set which showed the success of each team in each round (e.g.&nbsp;win or loss in the Round of 32), which would allow for each regression conducted later on to have its own data set. Finally, we created the <code>mm_WINS</code> variable which tracks how many wins a given team had in a tournament year. We deduced this from the outcome from the <code>march_madness</code> variable and applied it to our new variable. This helped us with our EDA as we were able to see how many wins each conference/team had in any given tournament.</p>
 </section>
 <section id="exploratory-data-analysis" class="level4">
 <h4 class="anchored" data-anchor-id="exploratory-data-analysis"><u>Exploratory Data Analysis</u></h4>
@@ -187,10 +187,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="round-by-round-logistic-regression" class="level3">
 <h3 class="anchored" data-anchor-id="round-by-round-logistic-regression"><u>Round-by-Round Logistic Regression</u></h3>
-<p>The following is an example of the regression that was ran on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. We put every variable from our dataset into the logisitic regression, with the interaction terms based on variables that would be considered to be differential statistics (i.e.&nbsp;3P% and 3P%D interact for 3-Pointer % Differential). The number of variables was then reduced to those considered appropriate using stepAIC works to attempt to limit the overfitting with the data. The stepAIC function was implemented starting at the upper model and going both directions. There is a potential problem in using glm fits with a variable scale, as in that case the deviance is not simply related to the maximized log-likelihood.</p>
-<p>We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not (binary response variable). For example round_64 measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament – we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).</p>
+<p>The following is an example of the regression that was run on all of the Round of 64 teams to create a regression that predicts winners (round_64 = TRUE) against losers (round_64 = FALSE) for the round. It is followed by the Round of 64 model output We put every variable from our data set into the logistic regression, with the interaction terms based on variables that would be considered to be differential team statistics (i.e.&nbsp;3P% and 3P%D interact for 3-Pointer % Differential). The number of variables was then reduced to those considered appropriate using stepAIC works to attempt to limit the overfitting of the data. StepAIC was chosen due to AIC’s ability to compare different models and the function’s easy implementation as a model. The stepAIC function was implemented starting at the upper model and going in both directions. However, the stepAIC function has a potential problem in using glm fits since in that case the deviance is not simply related to the maximized log-likelihood.</p>
+<p>We chose to do a logistic model because our outcome variable is whether they had won in the respective round or not (binary response variable). The round_64 variable measures whether the team won in the Round of 64. The outcome is either a win or loss, so a logistic regression model serves our analysis best. We did this for the first three rounds of the tournament—we avoided Elite Eight to the National Championship game as there simply was not enough data to create a viable predictive model (Northern Kentucky was predicted to win in the Final Four).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>round_64 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(round_64)</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>round_64_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(round_64_data)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>round_64_max <span class="ot">&lt;-</span> <span class="fu">glm</span>(round_64 <span class="sc">~</span> G.x <span class="sc">+</span> ADJOE <span class="sc">+</span> ADJDE <span class="sc">+</span> <span class="st">`</span><span class="at">EFG%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">EFGD%</span><span class="st">`</span> <span class="sc">+</span> TOR <span class="sc">+</span> </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                      TORD <span class="sc">+</span> ORB <span class="sc">+</span> DRB <span class="sc">+</span> FTR <span class="sc">+</span> FTRD <span class="sc">+</span> <span class="st">`</span><span class="at">2P%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">2P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3P%</span><span class="st">`</span> <span class="sc">+</span> </span>
@@ -199,16 +199,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                      <span class="st">`</span><span class="at">AST/TOV</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">PF/G</span><span class="st">`</span> <span class="sc">+</span> ADJOE<span class="sc">*</span>ADJDE <span class="sc">+</span> <span class="st">`</span><span class="at">EFG%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">EFGD%</span><span class="st">`</span> <span class="sc">+</span> TOR<span class="sc">*</span>TORD <span class="sc">+</span> </span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                      ORB<span class="sc">*</span>DRB <span class="sc">+</span> FTR<span class="sc">*</span>FTRD <span class="sc">+</span> <span class="st">`</span><span class="at">2P%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">2P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3P%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">3PR</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3PRD</span><span class="st">`</span> <span class="sc">+</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                      <span class="st">`</span><span class="at">2P%</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3P%</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">2P%D</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">3P%D</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">AVG PPG</span><span class="st">`</span><span class="sc">*</span><span class="st">`</span><span class="at">AVG DPPG</span><span class="st">`</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> round_64,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> round_64_data,</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>round_64_min <span class="ot">&lt;-</span> <span class="fu">glm</span>(round_64 <span class="sc">~</span> <span class="dv">1</span>,</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> round_64,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> round_64_data,</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>round_64_model <span class="ot">&lt;-</span> <span class="fu">stepAIC</span>(round_64_max,</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">scope =</span> <span class="fu">list</span>(<span class="at">lower =</span> round_64_min, <span class="at">upper =</span> round_64_max),</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> round_64, <span class="at">direction =</span> <span class="st">"both"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> round_64_data, <span class="at">direction =</span> <span class="st">"both"</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(round_64_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 
@@ -218,7 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="assumptions" class="level4">
 <h4 class="anchored" data-anchor-id="assumptions"><u>Assumptions</u></h4>
-<p>As discussed earlier, the independence assumption for the data cannot be well-assumed. There is also a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors.</p>
+<p>As discussed earlier, the independence assumption for the data cannot be well-assumed due to temporal connections, and we soon hope to be able to have ways to solve such issues in our statistical toolkit. Logistic regressions also have a linearity assumption that is based on there being a linear relationship between the log-odds of the response and the predictors:</p>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
@@ -237,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="overall-ordinal-regression" class="level3">
 <h3 class="anchored" data-anchor-id="overall-ordinal-regression"><u>Overall Ordinal Regression</u></h3>
-<p>We chose to complete an ordinal regression model as each of the progressing rounds of the tournament are in an ordinal progession. The variables used in the model were those that consistently showed up in the Round of 64, Round of 32, and Sweet Sixteen models after running the StepAIC function, meaning they can confidently be thought as meaningful predictors of success in the rounds of March Madness.</p>
+<p>We chose to complete an ordinal regression model as each of the progressing rounds of the tournament are in an ordinal progession. The variables used in the model were those that consistently showed up in the Round of 64, Round of 32, and Sweet Sixteen models after running the StepAIC function, meaning they can confidently be thought as meaningful predictors of success throughout multiple rounds of March Madness.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
@@ -282,26 +284,19 @@ AIC: 2041.75 </code></pre>
 <h4 class="anchored" data-anchor-id="round-of-64-predictions"><u>Round of 64 Predictions</u></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 64 × 37
-   predi…¹  prob  rank    RK TEAM    G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`
-     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
- 1    3.59 0.973     1     1 Hous…    34    31      3  117.  88     52.7    42.5
- 2    3.41 0.968     3     3 UCLA     34    29      5  113.  87.4   50.9    46.8
- 3    2.50 0.924    12    12 San …    32    26      6  111.  90.1   50.1    47.5
- 4    2.48 0.923     2     2 Alab…    34    29      5  115.  88.3   52.7    41.5
- 5    2.24 0.903     6     6 Purd…    34    29      5  118.  92.6   52.2    47.2
- 6    2.23 0.903    11    11 Marq…    34    28      6  119.  96.1   56      51.1
- 7    2.08 0.889    13    13 Kans…    34    27      7  113.  91.5   52.4    47.1
- 8    1.96 0.877     9     9 Texas    34    26      8  115.  91.6   52.7    47.8
- 9    1.89 0.868     4     4 Tenn…    33    23     10  111.  86.2   50.3    42.4
-10    1.74 0.850     5     5 Conn…    33    25      8  119.  92.5   53.5    45.5
-# … with 54 more rows, 25 more variables: TOR &lt;dbl&gt;, TORD &lt;dbl&gt;, ORB &lt;dbl&gt;,
-#   DRB &lt;dbl&gt;, FTR &lt;dbl&gt;, FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;,
-#   `3P%D` &lt;dbl&gt;, `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, G.y &lt;dbl&gt;,
-#   `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;, `Overall SOS` &lt;dbl&gt;,
-#   `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;, `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;,
-#   `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;, `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, and
-#   abbreviated variable name ¹​`predict(round_64_model, \`2023stats\`)`</code></pre>
+<pre><code># A tibble: 10 × 3
+   TEAM          `predict(round_64_model, \`2023stats\`)`  prob
+   &lt;chr&gt;                                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Houston                                           3.59 0.973
+ 2 UCLA                                              3.41 0.968
+ 3 San Diego St.                                     2.50 0.924
+ 4 Alabama                                           2.48 0.923
+ 5 Purdue                                            2.24 0.903
+ 6 Marquette                                         2.23 0.903
+ 7 Kansas                                            2.08 0.889
+ 8 Texas                                             1.96 0.877
+ 9 Tennessee                                         1.89 0.868
+10 Connecticut                                       1.74 0.850</code></pre>
 </div>
 </div>
 </section>
@@ -309,26 +304,19 @@ AIC: 2041.75 </code></pre>
 <h4 class="anchored" data-anchor-id="round-of-32-predictions"><u>Round of 32 Predictions</u></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 64 × 37
-   predi…¹  prob  rank    RK TEAM    G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`
-     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
- 1   2.18  0.899     1     1 Hous…    34    31      3  117.  88     52.7    42.5
- 2   1.50  0.817     3     3 UCLA     34    29      5  113.  87.4   50.9    46.8
- 3   1.27  0.780     2     2 Alab…    34    29      5  115.  88.3   52.7    41.5
- 4   1.03  0.736    10    10 Gonz…    32    27      5  123.  98.6   58.5    51.7
- 5   1.00  0.731    12    12 San …    32    26      6  111.  90.1   50.1    47.5
- 6   0.910 0.713     6     6 Purd…    34    29      5  118.  92.6   52.2    47.2
- 7   0.880 0.707    38    42 Penn…    35    22     13  115.  99.9   55.5    49.2
- 8   0.853 0.701    15    15 Bayl…    32    22     10  121.  99.5   53.1    51.4
- 9   0.848 0.700     4     4 Tenn…    33    23     10  111.  86.2   50.3    42.4
-10   0.779 0.686    14    14 Crei…    33    21     12  114.  92.8   54.3    47.3
-# … with 54 more rows, 25 more variables: TOR &lt;dbl&gt;, TORD &lt;dbl&gt;, ORB &lt;dbl&gt;,
-#   DRB &lt;dbl&gt;, FTR &lt;dbl&gt;, FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;,
-#   `3P%D` &lt;dbl&gt;, `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, G.y &lt;dbl&gt;,
-#   `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;, `Overall SOS` &lt;dbl&gt;,
-#   `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;, `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;,
-#   `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;, `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, and
-#   abbreviated variable name ¹​`predict(round_32_model, \`2023stats\`)`</code></pre>
+<pre><code># A tibble: 10 × 3
+   TEAM          `predict(round_32_model, \`2023stats\`)`  prob
+   &lt;chr&gt;                                            &lt;dbl&gt; &lt;dbl&gt;
+ 1 Houston                                          2.18  0.899
+ 2 UCLA                                             1.50  0.817
+ 3 Alabama                                          1.27  0.780
+ 4 Gonzaga                                          1.03  0.736
+ 5 San Diego St.                                    1.00  0.731
+ 6 Purdue                                           0.910 0.713
+ 7 Penn St.                                         0.880 0.707
+ 8 Baylor                                           0.853 0.701
+ 9 Tennessee                                        0.848 0.700
+10 Creighton                                        0.779 0.686</code></pre>
 </div>
 </div>
 </section>
@@ -336,26 +324,19 @@ AIC: 2041.75 </code></pre>
 <h4 class="anchored" data-anchor-id="sweet-sixteen-predictions"><u>Sweet Sixteen Predictions</u></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 64 × 37
-   predi…¹  prob  rank    RK TEAM    G.x  WINS LOSSES ADJOE ADJDE `EFG%` `EFGD%`
-     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
- 1   2.03  0.884     1     1 Hous…    34    31      3  117.  88     52.7    42.5
- 2   2.01  0.882     6     6 Purd…    34    29      5  118.  92.6   52.2    47.2
- 3   1.09  0.749    22    22 Texa…    34    25      9  113.  94.8   49      47.9
- 4   1.03  0.738     5     5 Conn…    33    25      8  119.  92.5   53.5    45.5
- 5   0.961 0.723    38    42 Penn…    35    22     13  115.  99.9   55.5    49.2
- 6   0.674 0.662    23    23 Aubu…    32    20     12  111.  93.2   49.6    45.6
- 7   0.624 0.651    13    13 Kans…    34    27      7  113.  91.5   52.4    47.1
- 8   0.532 0.630     2     2 Alab…    34    29      5  115.  88.3   52.7    41.5
- 9   0.467 0.615    26    26 TCU      33    21     12  110.  93.4   50.2    47.8
-10   0.449 0.610    12    12 San …    32    26      6  111.  90.1   50.1    47.5
-# … with 54 more rows, 25 more variables: TOR &lt;dbl&gt;, TORD &lt;dbl&gt;, ORB &lt;dbl&gt;,
-#   DRB &lt;dbl&gt;, FTR &lt;dbl&gt;, FTRD &lt;dbl&gt;, `2P%` &lt;dbl&gt;, `2P%D` &lt;dbl&gt;, `3P%` &lt;dbl&gt;,
-#   `3P%D` &lt;dbl&gt;, `3PR` &lt;dbl&gt;, `3PRD` &lt;dbl&gt;, `ADJ T` &lt;dbl&gt;, G.y &lt;dbl&gt;,
-#   `Overall W-L%` &lt;dbl&gt;, `Overall SRS` &lt;dbl&gt;, `Overall SOS` &lt;dbl&gt;,
-#   `Conf. W-L%` &lt;dbl&gt;, `Home W-L%` &lt;dbl&gt;, `Away W-L%` &lt;dbl&gt;, `AVG PPG` &lt;dbl&gt;,
-#   `AVG DPPG` &lt;dbl&gt;, `AVG PD` &lt;dbl&gt;, `AST/TOV` &lt;dbl&gt;, `PF/G` &lt;dbl&gt;, and
-#   abbreviated variable name ¹​`predict(sweet_sixteen_model, \`2023stats\`)`</code></pre>
+<pre><code># A tibble: 10 × 3
+   TEAM          `predict(sweet_sixteen_model, \`2023stats\`)`  prob
+   &lt;chr&gt;                                                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 Houston                                               2.03  0.884
+ 2 Purdue                                                2.01  0.882
+ 3 Texas A&amp;M                                             1.09  0.749
+ 4 Connecticut                                           1.03  0.738
+ 5 Penn St.                                              0.961 0.723
+ 6 Auburn                                                0.674 0.662
+ 7 Kansas                                                0.624 0.651
+ 8 Alabama                                               0.532 0.630
+ 9 TCU                                                   0.467 0.615
+10 San Diego St.                                         0.449 0.610</code></pre>
 </div>
 </div>
 </section>
@@ -363,49 +344,52 @@ AIC: 2041.75 </code></pre>
 <h4 class="anchored" data-anchor-id="ordinal-regression-predictions"><u>Ordinal Regression Predictions</u></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>           TEAM   R64   R32   S16    E8    F4   2ND Champions
-1       Houston 0.040 0.127 0.218 0.230 0.172 0.103     0.110
-2       Alabama 0.120 0.278 0.276 0.167 0.083 0.040     0.036
-3          UCLA 0.070 0.198 0.266 0.211 0.126 0.066     0.063
-4     Tennessee 0.089 0.233 0.276 0.194 0.106 0.053     0.049
-5   Connecticut 0.089 0.232 0.276 0.194 0.107 0.053     0.049
-6        Purdue 0.119 0.277 0.276 0.167 0.084 0.040     0.036
-7       Arizona 0.193 0.344 0.247 0.119 0.053 0.024     0.021
-8  Saint Mary's 0.176 0.333 0.256 0.128 0.058 0.026     0.023
-9         Texas 0.133 0.293 0.273 0.157 0.076 0.036     0.032
-10      Gonzaga 0.136 0.297 0.272 0.154 0.075 0.035     0.031</code></pre>
+<pre><code>           TEAM   R64   R32   S16    E8    F4   2ND Champions winning_odds
+1       Houston 0.040 0.127 0.218 0.230 0.172 0.103     0.110         +809
+2       Alabama 0.120 0.278 0.276 0.167 0.083 0.040     0.036        +2678
+3          UCLA 0.070 0.198 0.266 0.211 0.126 0.066     0.063        +1487
+4     Tennessee 0.089 0.233 0.276 0.194 0.106 0.053     0.049        +1941
+5   Connecticut 0.089 0.232 0.276 0.194 0.107 0.053     0.049        +1941
+6        Purdue 0.119 0.277 0.276 0.167 0.084 0.040     0.036        +2678
+7       Arizona 0.193 0.344 0.247 0.119 0.053 0.024     0.021        +4662
+8  Saint Mary's 0.176 0.333 0.256 0.128 0.058 0.026     0.023        +4248
+9         Texas 0.133 0.293 0.273 0.157 0.076 0.036     0.032        +3025
+10      Gonzaga 0.136 0.297 0.272 0.154 0.075 0.035     0.031        +3126</code></pre>
 </div>
 </div>
-<p>The slope coefficient for average points per game for the Sweet Sixteen logistic model is 1.036. Holding all other variables constant, for every one point increase in average points per game, the odds of winning in the Sweet Sixteen is associated with a e^1.036 = 2.818 multiplicative factor on the odds of winning in this round.</p>
-<p>The slope coefficient for average points per game for the ordinal regression model is 0.052. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e^0.052 = 1.054 - holding all other predictors in the model constant.</p>
+<p>All of the variables that ended up in our final ordinal regression model could be considered important, but for the sake of space and ease of understanding the interpretation we are focusing on the <code>Average PPG</code> variable.</p>
+<p>The slope coefficient for average points per game for the Round of 64 logistic model is 0.396. Holding all other variables constant, for every one point increase in average points per game, the odds of winning in the Sweet Sixteen is associated with a e^0.396 = 1.486 multiplicative factor on the odds of winning in this round.</p>
+<p>The slope coefficient for average points per game for the ordinal regression model is 0.052. For every one point increase in average points per game, the odds of moving onto the next round (the odds of winning in a given round) is predicted to be multiplied by e^0.052 = 1.054, while holding all other predictors in the model constant.</p>
 </section>
 <section id="predictive-power-via-2023-march-madness-predictions" class="level4">
 <h4 class="anchored" data-anchor-id="predictive-power-via-2023-march-madness-predictions"><u>Predictive Power via 2023 March Madness Predictions</u></h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><embed src="NCAA-Tournament-Printable-Bracket-2023.pdf" class="img-fluid" width="1833"></p>
+<p><embed src="NCAA-Tournament-Printable-Bracket-2023.pdf" class="img-fluid" width="2400"></p>
 </figure>
 </div>
-<p>The ordinal model was able to predict 23/32 and 12/16 of the teams to make it on to the Round of 32 and Sweet Sixteen, respectively. For comparison, this bracket predicted around the average score of our brackets, which were likely better than average since we grew up UConn fans and often had them going far. The successes in the earlier rounds fell off onto later rounds, of course due to chance, but possibly also due to quite low levels of data for prediction of success.</p>
+<p>The ordinal model was able to predict 23/32 and 12/16 of the teams to make it on to the Round of 32 and Sweet Sixteen, respectively. For comparison, this bracket predicted much better than the “people’s bracket,” which had mainly the higher numbered seeds winning each matchup and all four 1 seeds making the Final Four.</p>
 </section>
 <section id="key-results" class="level4">
 <h4 class="anchored" data-anchor-id="key-results"><u>Key Results</u></h4>
-<p>An unsurprising key result found was the randomness of the tournament, with a simple wrong decision in the earlier rounds multiplying into the lack of success for point totals in the later rounds. Based on the variables that ended up being chosen following the StepAIC function, summarizing variables that consider games played and strength of opponents over the season are stronger predictors than some of the overall percentage stats about schedule success (e.g.&nbsp;Home/Away Win %). From the variables that consistently showed up in the logisitic models and were thus used in the ordinal model, there was a higher emphasis on defensive stats compared to those of the offense.</p>
+<p>An unsurprising key result found was the randomness of the tournament, with a simple wrong decision in the earlier rounds multiplying into the lack of success for point totals in the later rounds. Based on the variables that ended up being chosen following the StepAIC function, summarizing variables that consider games played and strength of opponents over the season are stronger predictors than some of the overall percentage stats about schedule success (e.g.&nbsp;Home/Away Win %). From the variables that consistently showed up in the logistic models and were thus used in the ordinal model, there was a higher emphasis on defensive stats compared to those of the offense.</p>
 </section>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion"><u>Discussion</u></h2>
 <p>The variables that we noted to be most important were summary statistics about a team’s offensive and defensive capabilities, specifically around shooting and when accounting into the strength of opponents. This led into ADJOE, ADJDE, and PPG Scored and Allowed being important variables for the model. Based on the predictions for this year, the suprise team was Florida Atlantic University, who was able to make the Final Four despite being predicted to lose in the Round of 64 against Memphis by both the ordinal and Round of 64 logistic regression. Our model did, unfortunately, predict Duke losing to Tennessee in the Round of 32.</p>
-<p>Some of the other interesting surprises that our model did not get right include:</p>
+<p>By running our ordinal model to predict the upsets and cinderella stories of the past 15 years of March Madness we found these outliers:</p>
 <ul>
-<li><p>16-seed Fairleigh Dickinson’s upset of 1-seed Purdue: Our model had Purdue reaching the Sweet Sixteen. Our model also stated that FDU had the lowest probability of winning any game (ranked the worst team in the tournament).</p></li>
-<li><p>15-seed Princeton’s upset of 2-seed Arizona: Princeton was ranked as the 55th best team in the tournament. Arizona was predicted to reach the Sweet Sixteen.</p></li>
-<li><p>4-seed Tennessee were predicted to play in the National Championship game, but they lost in the Sweet Sixteen as a part of FAU’s Cinderella story. Per our model, FAU was ranked as the 25th best team in the tournament.</p></li>
+<li><p>2023 16-seed FDU upsets 1-seed Purdue: Our model also stated that FDU had the lowest probability of winning any game out of ANY team in the last 16 years, yet they pulling off the upset over a strong national title contender</p></li>
+<li><p>2022 15-seed Saint Peter’s beats 2-seed Kentucky: Kentucky was predicted to be a contender for the national title, while Saint Peter’s beat out crazy low odds to make the Elite 8</p></li>
+<li><p>2011 Connecticut’s national title: The model left UConn with odds around 1 in 100 to win the tournament, which was the lowest of any winning team in the data set</p></li>
+<li><p>2011 VCU makes the Final Four: It was predicted 1 in 5 for the team to even win their first round game, yet the team was able to make it much further</p></li>
+<li><p>2014 Duke and 2022 UNC: Brutal</p></li>
 </ul>
 <p>Among the issues of our analysis is the glaring lack of independence between observations that would be required for many of the regressions used for prediction. As STA 210 students, our statistical toolkit does not yet have the necessary knowledge to deal with these issues of time-related data, so hopefully as it expands in further classes we will be able to come back and solve some of the issues with the violations. Possible issues with the model could include a lack of importance placed on the recent due to the stats used being from the season as a whole, thus injuries and general performance boosts lack as much influence as might be needed. There is also a small subset of data that is available to us, such as not much being known about the types of shots each team is taking, which could be important to the micro-level analysis of teams.</p>
 <section id="ideas-for-future-work" class="level4">
 <h4 class="anchored" data-anchor-id="ideas-for-future-work"><u>Ideas for Future Work</u></h4>
-<p>There are quite a few limitations to the model that can be worked towards and improved for a better analysis. The much repeated violated assumption has been the independence between observations, stemming from similarities between teams and years. There are various ways of dealing with this, which can be further dealt with after adding to our statistical toolkit in courses like STA 344 (Introduction to the Statistical Modeling of Spatial and Time Series Data). The complexities of the real world and March Madness also means that although there is a lot of information being fed into the regression, there are likely still key pieces of data that are not included. Of course, this data could simply be added, or a new more novel strategy could be the use of something like machine learning for a more nuanced prediction with the factors that are found to be important. An interesting outcome which could come from this is its use in areas like sports betting to beat the odds makers and quantify success in yet another way. For the non-gamblers, perhaps another valuable outcome from this analysis could be a potential perfect bracket, winning Warren Buffet’s billion-dollar prize.</p>
+<p>There are quite a few limitations to the model that can be worked towards and improved for a better analysis. The much repeated violated assumption has been the independence between observations, stemming from similarities between teams and years. There are various ways of dealing with this, which can be further dealt with after adding to our statistical toolkit in courses like STA 344 (Introduction to the Statistical Modeling of Spatial and Time Series Data). The complexities of the real world and March Madness also means that although there is a lot of information being fed into the regression, there are likely still key pieces of data that are not included. Of course, this data could simply be added, or a new more novel strategy could be the use of something like machine learning for a more nuanced prediction with the factors that are found to be important. In terms of the probabilities, since match-ups and brackets are not being set up against each other, the probabilities of opposing teams winning a game does not add up to 1, which would require setting up a bracket to do. An interesting outcome which could come from this is its use in areas like sports betting to beat the odds makers and quantify success in yet another way. For the non-gamblers, perhaps another valuable outcome from this analysis could be a potential perfect bracket, winning Warren Buffet’s billion-dollar prize.</p>
 </section>
 </section>
 
